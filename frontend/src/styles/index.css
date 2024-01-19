@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		font-family: 'Poppins', system-ui, sans-serif;
+	}
+}
+
+body {
+	@apply bg-black-light text-white;
+}
+
+svg {
+	@apply text-base;
+}
+
+.image-background {
+	background-position: top;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: url('https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+
+h2 {
+	@apply text-2xl font-semibold;
+}
+
+a {
+	@apply text-nowrap whitespace-nowrap;
+}
+
+button:disabled {
+	@apply opacity-75;
+}
+
+.default-button {
+	@apply px-6 py-3 text-sm border-2 flex items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+}
+
+.icon-button {
+	@apply p-3 text-base border-2 flex items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+}
+
+.form-field-wrapper {
+	@apply flex flex-col gap-3;
+}
+
+.form-input {
+	@apply px-4 py-2 bg-transparent text-white rounded-full border-2 border-gray-light placeholder:text-gray-light focus:ring-0 focus:border-white;
+}
+
+.form-error {
+	@apply px-2 rounded-lg text-sm;
+}
