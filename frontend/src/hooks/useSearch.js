@@ -1,26 +1,27 @@
-import axios from 'axios';
 import { useState } from 'react';
 
-const useFetch = () => {
-	const [error, setError] = useState('');
+const useSearch = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
-	const searchData = (endpoint) => {
+	const searchData = async (params) => {
 		setIsLoading(true);
-		setError('');
-		const response = axios.get(`http://localhost:5000/${endpoint}?year=1994`);
-		const data = response.data;
+		const searchParams = new URLSearchParams(params);
+
+		const response = await fetch(
+			`http://localhost:5000/api/movies?${searchParams.toString()}`
+		);
+		const responseBody = await response.json();
 
 		if (!response.ok) {
-			setError(data.error);
 			setIsLoading(false);
+			throw Error(responseBody.error);
 		} else {
 			setIsLoading(false);
-			return data;
+			return responseBody;
 		}
 	};
 
-	return { searchData, isLoading, error };
+	return { searchData, isLoading };
 };
 
-export default useFetch;
+export default useSearch;

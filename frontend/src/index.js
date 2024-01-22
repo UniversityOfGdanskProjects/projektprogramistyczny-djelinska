@@ -2,6 +2,7 @@ import './styles/index.css';
 
 import App from './App';
 import AuthProvider from './contexts/AuthProvider';
+import MoviesProvider from './contexts/MoviesProvider';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
@@ -10,7 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<AuthProvider>
-			<App />
+			<MoviesProvider>
+				<App />
+			</MoviesProvider>
 		</AuthProvider>
 	</React.StrictMode>
 );

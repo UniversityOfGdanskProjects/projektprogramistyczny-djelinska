@@ -3,14 +3,18 @@ const {
 	importMovies,
 	getMovies,
 	getMovie,
+	getMoviesGenres,
+	getMoviesYears,
 } = require('../controllers/movieController');
-const { checkAdmin } = require('../middlewares/authMiddleware');
+const { checkAdmin, requireToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 // /api/movies
-router.get('/import', checkAdmin, importMovies);
+router.get('/import', requireToken, checkAdmin, importMovies);
 router.get('/', getMovies);
-router.get('/:id', getMovie);
+router.get('/movie/:id', getMovie);
+router.get('/genres', getMoviesGenres);
+router.get('/years', getMoviesYears);
 
 module.exports = router;

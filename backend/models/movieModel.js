@@ -1,12 +1,5 @@
 const mongoose = require('mongoose');
 
-const genreSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		unique: true,
-	},
-});
-
 const movieSchema = new mongoose.Schema(
 	{
 		title: {
@@ -17,12 +10,10 @@ const movieSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		genres: [
-			{
-				type: String,
-				ref: 'Genre',
-			},
-		],
+		genre: {
+			type: String,
+			required: true,
+		},
 		release_year: {
 			type: Number,
 			required: true,
@@ -59,6 +50,16 @@ const movieSchema = new mongoose.Schema(
 				ref: 'Review',
 			},
 		],
+		rate: {
+			type: Number,
+			required: true,
+			default: 0,
+		},
+		rating_count: {
+			type: Number,
+			required: true,
+			default: 0,
+		},
 	},
 	{ timestamps: true }
 );

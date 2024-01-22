@@ -21,9 +21,12 @@ module.exports = {
 		},
 		extend: {
 			padding: {
-				navbar: '97px',
+				navbar: '73px',
 			},
 		},
 	},
-	plugins: [require('@tailwindcss/forms')],
+	plugins: [
+		require('@tailwindcss/forms'),
+		require('@tailwindcss/aspect-ratio'),
+	],
 };

@@ -3,6 +3,7 @@ import {
 	Route,
 	BrowserRouter as Router,
 	Routes,
+	useLocation,
 } from 'react-router-dom';
 
 import FavoriteMovies from './pages/FavoriteMovies';
@@ -10,7 +11,7 @@ import Footer from './components/footer/Footer';
 import Home from './pages/Home';
 import LoginForm from './pages/LoginForm';
 import MovieDetails from './pages/MovieDetails';
-import MovieList from './pages/MovieList';
+import Movies from './pages/Movies';
 import Navbar from './components/navbar/Navbar';
 import NotFound from './pages/NotFound';
 import ProfileInfo from './pages/ProfileInfo';
@@ -35,7 +36,7 @@ function App() {
 						path='/login'
 						element={!user ? <LoginForm /> : <Navigate to='/' />}
 					/>
-					<Route path='/filmy' element={<MovieList />} />
+					<Route path='/filmy' element={<Movies />} />
 					<Route path='/filmy/:id' element={<MovieDetails />} />
 					<Route
 						path='/profil'

@@ -16,10 +16,9 @@ const Navbar = () => {
 	];
 
 	return (
-		<nav className='fixed top-0 w-full text-sm px-6 py-3 bg-black-dark border-b border-gray-dark flex items-center justify-between gap-6 shadow-lg'>
+		<nav className='fixed top-0 z-10 w-full text-sm px-6 py-3 bg-black-dark border-b border-gray-dark flex items-center justify-between gap-6 shadow-lg'>
 			<Logo />
-			<SearchBar />
-			<div className='ml-auto flex gap-6'>
+			<div className='flex gap-6'>
 				{links.map((link) => (
 					<Link
 						key={link.path}
@@ -34,7 +33,10 @@ const Navbar = () => {
 			</div>
 			{!user ? (
 				<>
-					<Link to='/login' className='default-button border-neutral-300'>
+					<Link
+						to='/login'
+						className='default-button border-neutral-300 ml-auto'
+					>
 						Zaloguj się
 					</Link>
 					<Link

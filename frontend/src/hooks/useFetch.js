@@ -1,22 +1,22 @@
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const useFetch = () => {
-	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('');
 
-	const fetchData = (endpoint) => {
+	const fetchData = async (endpoint) => {
 		setIsLoading(true);
-		setError('');
-		const response = axios.get(`http://localhost:5000/${endpoint}`);
-		const data = response.data;
+
+		const response = await fetch(`http://localhost:5000/api/${endpoint}`);
+		const responseBody = await response.json();
 
 		if (!response.ok) {
-			setError(data.error);
 			setIsLoading(false);
+			setError(responseBody.error);
 		} else {
 			setIsLoading(false);
-			return data;
+			return responseBody;
 		}
 	};
 

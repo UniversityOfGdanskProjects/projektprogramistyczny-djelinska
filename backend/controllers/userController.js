@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
 		});
 		const token = createToken(user._id);
 
-		res.status(201).json({ username, token });
+		res.status(201).json({ username, is_user: !user.is_admin, token });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
 
 		const token = createToken(user._id);
 
-		res.status(200).json({ username, token });
+		res.status(200).json({ username, is_user: !user.is_admin, token });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });

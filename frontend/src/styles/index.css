@@ -37,11 +37,11 @@ button:disabled {
 }
 
 .default-button {
-	@apply px-6 py-3 text-sm border-2 flex items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+	@apply w-fit px-6 py-3 text-sm border-2 flex gap-2 items-center justify-center rounded-full text-nowrap whitespace-nowrap;
 }
 
 .icon-button {
-	@apply p-3 text-base border-2 flex items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+	@apply w-fit h-fit p-3 text-base border-2 flex items-center justify-center rounded-full text-nowrap whitespace-nowrap;
 }
 
 .form-field-wrapper {
@@ -53,5 +53,33 @@ button:disabled {
 }
 
 .form-error {
-	@apply px-2 rounded-lg text-sm;
+	@apply px-2 text-sm;
+}
+
+.movie-card-container {
+	@apply flex bg-black-dark rounded-md;
+}
+
+.movie-card-container span {
+	@apply text-nowrap whitespace-nowrap;
+}
+
+.movie-card-rating {
+	@apply flex items-center gap-2;
+}
+
+.movie-card-rating svg {
+	@apply text-red-dark;
+}
+
+.movie-card-button {
+	@apply w-fit px-4 py-2 font-medium bg-gray-dark flex items-center gap-2 rounded-full;
+}
+
+.pagination-button {
+	@apply w-fit px-4 bg-gray-light;
+}
+
+.movies-select {
+	@apply bg-black-dark border-none w-fit pr-10 focus:ring-2 focus:ring-red-dark;
 }
