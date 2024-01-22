@@ -6,9 +6,7 @@ const MovieTrailer = ({ videoUrl, title }) => {
 				className='w-full aspect-2'
 				src={videoUrl}
 				title={title}
-				frameborder='0'
-				allow='modestbranding; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-				allowfullscreen
+				allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
 			></iframe>
 		</div>
 	);

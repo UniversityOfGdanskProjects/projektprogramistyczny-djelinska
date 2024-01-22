@@ -44,18 +44,45 @@ const movieSchema = new mongoose.Schema(
 		poster_image: { type: String },
 		video_url: { type: String },
 		images: [{ type: String }],
-		reviews: [
+		comments: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Review',
+				user_id: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'User',
+					required: true,
+				},
+				comment: {
+					type: String,
+					required: true,
+				},
 			},
 		],
-		rate: {
+		ratings: [
+			{
+				user_id: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'User',
+					required: true,
+				},
+				rating: {
+					type: Number,
+					required: true,
+					min: 1,
+					max: 5,
+				},
+			},
+		],
+		rating_count: {
 			type: Number,
 			required: true,
 			default: 0,
 		},
-		rating_count: {
+		total_rating: {
+			type: Number,
+			required: true,
+			default: 0,
+		},
+		rate: {
 			type: Number,
 			required: true,
 			default: 0,

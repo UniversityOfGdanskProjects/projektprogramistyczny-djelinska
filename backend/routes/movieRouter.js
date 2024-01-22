@@ -5,6 +5,8 @@ const {
 	getMovie,
 	getMoviesGenres,
 	getMoviesYears,
+	addMovieRating,
+	addMovieComment,
 } = require('../controllers/movieController');
 const { checkAdmin, requireToken } = require('../middlewares/authMiddleware');
 
@@ -16,5 +18,8 @@ router.get('/', getMovies);
 router.get('/movie/:id', getMovie);
 router.get('/genres', getMoviesGenres);
 router.get('/years', getMoviesYears);
+
+router.post('/rate/add', requireToken, addMovieRating);
+router.post('/comment/add', requireToken, addMovieComment);
 
 module.exports = router;

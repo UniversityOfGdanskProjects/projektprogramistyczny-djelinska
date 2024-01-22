@@ -37,7 +37,7 @@ button:disabled {
 }
 
 .default-button {
-	@apply w-fit px-6 py-3 text-sm border-2 flex gap-2 items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+	@apply px-6 py-3 text-sm border-2 flex gap-2 items-center justify-center rounded-full text-nowrap whitespace-nowrap;
 }
 
 .icon-button {
@@ -50,6 +50,10 @@ button:disabled {
 
 .form-input {
 	@apply px-4 py-2 bg-transparent text-white rounded-full border-2 border-gray-light placeholder:text-gray-light focus:ring-0 focus:border-white;
+}
+
+.form-textarea {
+	@apply resize-none px-4 py-2 bg-black-light text-white rounded-md border-none placeholder:text-gray-light focus:ring-0;
 }
 
 .form-error {
@@ -82,4 +86,12 @@ button:disabled {
 
 .movies-select {
 	@apply bg-black-dark border-none w-fit pr-10 focus:ring-2 focus:ring-red-dark;
+}
+
+.rating-star-checked svg {
+	@apply text-2xl text-red-dark;
+}
+
+.rating-star-not-checked svg {
+	@apply text-2xl text-gray-light;
 }

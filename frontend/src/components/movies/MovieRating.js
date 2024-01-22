@@ -9,7 +9,7 @@ const MovieRating = ({ rate, rating_count, size }) => {
 			<span
 				className={`font-medium ${size === 'small' ? 'text-xl' : 'text-2xl'}`}
 			>
-				{rate}
+				{rate.toFixed(1)}
 			</span>
 			<span
 				className={`text-gray-light ${

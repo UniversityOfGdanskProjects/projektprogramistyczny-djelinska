@@ -18,7 +18,7 @@ const Navbar = () => {
 	return (
 		<nav className='fixed top-0 z-10 w-full text-sm px-6 py-3 bg-black-dark border-b border-gray-dark flex items-center justify-between gap-6 shadow-lg'>
 			<Logo />
-			<div className='flex gap-6'>
+			<div className='flex gap-6 mr-auto'>
 				{links.map((link) => (
 					<Link
 						key={link.path}
@@ -33,10 +33,7 @@ const Navbar = () => {
 			</div>
 			{!user ? (
 				<>
-					<Link
-						to='/login'
-						className='default-button border-neutral-300 ml-auto'
-					>
+					<Link to='/login' className='default-button border-neutral-300'>
 						Zaloguj się
 					</Link>
 					<Link

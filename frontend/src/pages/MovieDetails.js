@@ -2,6 +2,9 @@ import { PiCalendarBlankBold, PiClockBold } from 'react-icons/pi';
 import { useEffect, useState } from 'react';
 
 import ActorCard from '../components/movies/details/ActorCard';
+import AddComment from '../components/movies/details/AddComment';
+import AddRating from '../components/movies/details/AddRating';
+import CommentsList from '../components/movies/details/CommentsList';
 import IconText from '../components/movies/IconText';
 import MovieOptions from '../components/movies/MovieOptions';
 import MovieRating from '../components/movies/MovieRating';
@@ -16,13 +19,14 @@ const MovieDetails = () => {
 	const { fetchData, error } = useFetch();
 	const { convertMovieTime } = useMoviesContext();
 	const { id } = useParams();
+	const [changed, setChanged] = useState(false);
+
+	const getMovie = async () => {
+		const movie = await fetchData(`movies/movie/${id}`);
+		setMovie(movie);
+	};
 
 	useEffect(() => {
-		const getMovie = async () => {
-			const movie = await fetchData(`movies/movie/${id}`);
-			setMovie(movie);
-		};
-
 		getMovie();
 	}, []);
 
@@ -86,6 +90,11 @@ const MovieDetails = () => {
 								))}
 							</div>
 						</div>
+						<AddRating movieId={movie._id} handleChange={getMovie} />
+						<AddComment movieId={movie._id} handleChange={getMovie} />
+						{movie.comments.length > 0 && (
+							<CommentsList comments={movie.comments} />
+						)}
 					</div>
 				</div>
 			)}

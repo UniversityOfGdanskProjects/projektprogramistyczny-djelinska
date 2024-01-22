@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const moviesData = require('../data/movies');
 const Movie = require('../models/movieModel');
 
@@ -7,8 +8,9 @@ const importMovies = async (req, res) => {
 
 		const moviesDataWithDefaults = moviesData.map((movie) => ({
 			...movie,
-			rate: 0,
 			rating_count: 0,
+			total_rating: 0,
+			rate: 0,
 		}));
 		const movies = await Movie.insertMany(moviesDataWithDefaults);
 
@@ -50,7 +52,7 @@ const getMovies = async (req, res) => {
 		const pageLimit = 2;
 		const moviesSkip = (page - 1) * pageLimit;
 		const movies = await Movie.find(filterOptions)
-			.sort(orderOptions)
+			.sort({ ...orderOptions, _id: 1 })
 			.skip(moviesSkip)
 			.limit(pageLimit);
 
@@ -66,7 +68,10 @@ const getMovies = async (req, res) => {
 
 const getMovie = async (req, res) => {
 	try {
-		const movie = await Movie.findById(req.params.id);
+		const movie = await Movie.findById(req.params.id).populate(
+			'comments.user_id',
+			'username'
+		);
 
 		if (!movie) {
 			return res.status(404).json({ error: 'Nie znaleziono filmu' });
@@ -119,10 +124,91 @@ const getMoviesYears = async (req, res) => {
 	}
 };
 
+const addMovieRating = async (req, res) => {
+	try {
+		const { movie_id, rate } = req.body;
+		const movie = await Movie.findById(movie_id);
+
+		if (!movie) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		const isMovieRated = await Movie.find({
+			_id: movie_id,
+			'ratings.user_id': { $in: [req.user._id] },
+		});
+
+		if (isMovieRated.length > 0) {
+			return res.status(400).json({ error: 'Film został już oceniony' });
+		}
+
+		if (!rate || parseInt(rate) < 1 || parseInt(rate) > 5) {
+			return res.status(400).json({ error: 'Nieprawidłowa ocena' });
+		}
+
+		await Movie.findByIdAndUpdate(movie_id, {
+			$push: {
+				ratings: {
+					user_id: req.user._id,
+					rating: parseInt(rate),
+				},
+			},
+			$inc: { rating_count: 1, total_rating: parseInt(rate) },
+		});
+
+		const updatedMovie = await Movie.findById(movie_id);
+
+		const newRate =
+			updatedMovie.rating_count > 0
+				? updatedMovie.total_rating / updatedMovie.rating_count
+				: 0;
+
+		await Movie.findByIdAndUpdate(movie_id, {
+			$set: { rate: newRate },
+		});
+
+		res.status(201).json({ message: 'Dodano ocenę filmu' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const addMovieComment = async (req, res) => {
+	try {
+		const { movie_id, comment } = req.body;
+		const movie = await Movie.findById(movie_id);
+
+		if (!movie) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		if (!comment) {
+			return res.status(400).json({ error: 'Komentarz jest wymagany' });
+		}
+
+		await Movie.findByIdAndUpdate(movie_id, {
+			$push: {
+				comments: {
+					user_id: req.user._id,
+					comment: comment,
+				},
+			},
+		});
+
+		res.status(201).json({ message: 'Komentarz został dodany' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
 module.exports = {
 	importMovies,
 	getMovies,
 	getMovie,
 	getMoviesGenres,
 	getMoviesYears,
+	addMovieRating,
+	addMovieComment,
 };
