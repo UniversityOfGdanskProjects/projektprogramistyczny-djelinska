@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { useAuthContext } from '../contexts/AuthProvider';
 import useDelete from '../hooks/useDelete';
 import { useFormik } from 'formik';
+import useLogout from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import useUpdate from '../hooks/useUpdate';
@@ -17,6 +18,7 @@ const ProfileInfo = () => {
 	const [error, setError] = useState('');
 	const navigate = useNavigate();
 	const { user, logoutUser } = useAuthContext();
+	const { logout } = useLogout();
 	const { errors, touched, dirty, isValid, getFieldProps, handleSubmit } =
 		useFormik({
 			initialValues: {
@@ -53,6 +55,7 @@ const ProfileInfo = () => {
 			if (!deleteLoading) {
 				try {
 					await deleteData('users/account/delete');
+					logout();
 					logoutUser();
 					navigate('/');
 				} catch (err) {

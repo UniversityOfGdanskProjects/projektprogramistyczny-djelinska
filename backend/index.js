@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const userRouter = require('./routes/userRouter');
 const movieRouter = require('./routes/movieRouter');
+const adminRouter = require('./routes/adminRouter');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', userRouter);
 app.use('/api/movies', movieRouter);
+app.use('/api/admin', adminRouter);
 
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);

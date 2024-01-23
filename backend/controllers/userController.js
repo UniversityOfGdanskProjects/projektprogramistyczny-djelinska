@@ -419,40 +419,6 @@ const deleteIgnoredMovie = async (req, res) => {
 	}
 };
 
-const getUsers = async (req, res) => {
-	try {
-		const users = await User.find({});
-
-		res.status(200).json(users);
-	} catch (error) {
-		console.log(error.message);
-		res.status(500).json({ error: 'Coś poszło nie tak' });
-	}
-};
-
-const deleteUser = async (req, res) => {
-	try {
-		const user = await User.findById(req.params.id);
-
-		if (!user) {
-			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
-		}
-
-		if (user.is_admin) {
-			return res
-				.status(400)
-				.json({ error: 'Brak możliwości usunięcia użytkownika' });
-		}
-
-		await User.findByIdAndDelete(req.params.id);
-
-		res.status(200).json({ message: 'Użytkownik został usunięty' });
-	} catch (error) {
-		console.log(error.message);
-		res.status(500).json({ error: 'Coś poszło nie tak' });
-	}
-};
-
 module.exports = {
 	registerUser,
 	loginUser,
@@ -468,6 +434,4 @@ module.exports = {
 	getUserIgnoredMovies,
 	addIgnoredMovie,
 	deleteIgnoredMovie,
-	getUsers,
-	deleteUser,
 };

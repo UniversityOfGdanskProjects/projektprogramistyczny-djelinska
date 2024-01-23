@@ -5,6 +5,7 @@ import {
 	Routes,
 } from 'react-router-dom';
 
+import AdminDashboard from './pages/AdminDashboard';
 import FavoriteMovies from './pages/FavoriteMovies';
 import Footer from './components/footer/Footer';
 import Home from './pages/Home';
@@ -28,6 +29,18 @@ function App() {
 				<Navbar />
 				<Routes>
 					<Route path='/' element={<Home />} />
+					<Route
+						path='/panel'
+						element={
+							!user ? (
+								<Navigate tp='/' />
+							) : !user.is_user ? (
+								<AdminDashboard />
+							) : (
+								<Navigate to='/' />
+							)
+						}
+					/>
 					<Route
 						path='/rejestracja'
 						element={!user ? <SignupForm /> : <Navigate to='/' />}

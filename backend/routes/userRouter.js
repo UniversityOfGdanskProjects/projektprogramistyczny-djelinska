@@ -14,8 +14,6 @@ const {
 	getUserIgnoredMovies,
 	addIgnoredMovie,
 	deleteIgnoredMovie,
-	getUsers,
-	deleteUser,
 } = require('../controllers/userController');
 const { requireToken, checkAdmin } = require('../middlewares/authMiddleware');
 
@@ -40,8 +38,5 @@ router.patch('/watchlist/delete', requireToken, deleteWatchlistMovie);
 router.get('/ignored', requireToken, getUserIgnoredMovies);
 router.patch('/ignored/add', requireToken, addIgnoredMovie);
 router.patch('/ignored/delete', requireToken, deleteIgnoredMovie);
-
-router.get('/', requireToken, checkAdmin, getUsers);
-router.delete('/:id', requireToken, checkAdmin, deleteUser);
 
 module.exports = router;
