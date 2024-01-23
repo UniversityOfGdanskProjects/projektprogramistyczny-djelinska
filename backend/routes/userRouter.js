@@ -2,6 +2,7 @@ const express = require('express');
 const {
 	registerUser,
 	loginUser,
+	getUser,
 	updateUserAccount,
 	deleteUserAccount,
 	getUserFavoriteMovies,
@@ -24,8 +25,9 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 
-router.patch('/', requireToken, updateUserAccount);
-router.delete('/', requireToken, deleteUserAccount);
+router.get('/account', requireToken, getUser);
+router.patch('/account/update', requireToken, updateUserAccount);
+router.delete('/account/delete', requireToken, deleteUserAccount);
 
 router.get('/favorites', requireToken, getUserFavoriteMovies);
 router.patch('/favorites/add', requireToken, addFavoriteMovie);

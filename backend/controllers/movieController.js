@@ -64,7 +64,10 @@ const getMovies = async (req, res) => {
 		})
 			.sort({ ...orderOptions, _id: 1 })
 			.skip(moviesSkip)
-			.limit(pageLimit);
+			.limit(pageLimit)
+			.select(
+				'title description genre release_year duration_time poster_image rating_count total_rating rate'
+			);
 
 		const moviesCount = await Movie.countDocuments({
 			...filterOptions,

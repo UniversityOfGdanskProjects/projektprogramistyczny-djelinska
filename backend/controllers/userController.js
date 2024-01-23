@@ -54,9 +54,24 @@ const loginUser = async (req, res) => {
 	}
 };
 
+const getUser = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		res.status(200).json(user);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
 const updateUserAccount = async (req, res) => {
 	try {
-		const { username, currentPassword, newPassword } = req.body;
+		const { currentPassword, newPassword } = req.body;
 		const user = await User.findById(req.user._id);
 
 		if (!user) {
@@ -64,10 +79,6 @@ const updateUserAccount = async (req, res) => {
 		}
 
 		const updateFields = {};
-
-		if (username) {
-			updateFields.username = username;
-		}
 
 		if (currentPassword && newPassword) {
 			const passwordsMatch = await bcrypt.compare(
@@ -91,7 +102,9 @@ const updateUserAccount = async (req, res) => {
 			{ new: true }
 		);
 
-		res.status(200).json(updatedUser);
+		res
+			.status(200)
+			.json({ message: 'Hasło zostało zmienione', user: updatedUser });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
@@ -114,7 +127,7 @@ const deleteUserAccount = async (req, res) => {
 
 		await User.findByIdAndDelete(req.user._id);
 
-		res.status(200).json({ message: 'Użytkownik został usunięty' });
+		res.status(200).json({ message: 'Konto zostało usunięte' });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
@@ -443,6 +456,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
 	registerUser,
 	loginUser,
+	getUser,
 	updateUserAccount,
 	deleteUserAccount,
 	getUserFavoriteMovies,
