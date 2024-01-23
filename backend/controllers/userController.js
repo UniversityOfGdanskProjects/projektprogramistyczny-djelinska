@@ -123,7 +123,10 @@ const deleteUserAccount = async (req, res) => {
 
 const getUserFavoriteMovies = async (req, res) => {
 	try {
-		const user = await User.findById(req.user._id).populate('favorite_movies');
+		const user = await User.findById(req.user._id).populate(
+			'favorite_movies',
+			'poster_image title duration_time release_year genre'
+		);
 
 		if (!user) {
 			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
@@ -172,7 +175,7 @@ const addFavoriteMovie = async (req, res) => {
 			$push: { favorite_movies: movie_id },
 		});
 
-		res.status(200).json(user.favorite_movies);
+		res.status(200).json({ message: 'Dodano film do ulubionych' });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
@@ -207,6 +210,196 @@ const deleteFavoriteMovie = async (req, res) => {
 		res
 			.status(200)
 			.json({ message: 'Film został usunięty z listy ulubionych' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const getUserWatchlistMovies = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id).populate(
+			'watchlist_movies',
+			'poster_image title duration_time release_year genre'
+		);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		res.status(200).json(user.watchlist_movies);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const addWatchlistMovie = async (req, res) => {
+	try {
+		const { movie_id } = req.body;
+		const user = await User.findById(req.user._id);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		if (!mongoose.isValidObjectId(movie_id)) {
+			return res
+				.status(400)
+				.json({ error: 'Nieprawidłowy identyfikator filmu' });
+		}
+
+		const movieExists = await Movie.findOne({ _id: movie_id });
+
+		if (!movieExists) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		const isMovieAdded = await User.find({
+			_id: req.user._id,
+			watchlist_movies: { $in: [movie_id] },
+		});
+
+		if (isMovieAdded.length > 0) {
+			return res
+				.status(400)
+				.json({ error: 'Film znajduje się już na liście do obejrzenia' });
+		}
+
+		await User.findByIdAndUpdate(req.user._id, {
+			$push: { watchlist_movies: movie_id },
+		});
+
+		res.status(200).json({ message: 'Zapisano film na liście do obejrzenia' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const deleteWatchlistMovie = async (req, res) => {
+	try {
+		const { movie_id } = req.body;
+		const user = await User.findById(req.user._id);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		if (!mongoose.isValidObjectId(movie_id)) {
+			return res
+				.status(400)
+				.json({ error: 'Nieprawidłowy identyfikator filmu' });
+		}
+
+		const movieExists = await Movie.findOne({ _id: movie_id });
+
+		if (!movieExists) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		await User.findByIdAndUpdate(req.user._id, {
+			$pull: { watchlist_movies: movie_id },
+		});
+
+		res
+			.status(200)
+			.json({ message: 'Film został usunięty z listy do obejrzenia' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const getUserIgnoredMovies = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id).populate(
+			'ignored_movies',
+			'title genre'
+		);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		res.status(200).json(user.ignored_movies);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const addIgnoredMovie = async (req, res) => {
+	try {
+		const { movie_id } = req.body;
+		const user = await User.findById(req.user._id);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		if (!mongoose.isValidObjectId(movie_id)) {
+			return res
+				.status(400)
+				.json({ error: 'Nieprawidłowy identyfikator filmu' });
+		}
+
+		const movieExists = await Movie.findOne({ _id: movie_id });
+
+		if (!movieExists) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		const isMovieAdded = await User.find({
+			_id: req.user._id,
+			ignored_movies: { $in: [movie_id] },
+		});
+
+		if (isMovieAdded.length > 0) {
+			return res
+				.status(400)
+				.json({ error: 'Film znajduje się już na liście ignorowanych' });
+		}
+
+		await User.findByIdAndUpdate(req.user._id, {
+			$push: { ignored_movies: movie_id },
+		});
+
+		res.status(200).json({ message: 'Zapisano film na liście ignorowanych' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const deleteIgnoredMovie = async (req, res) => {
+	try {
+		const { movie_id } = req.body;
+		const user = await User.findById(req.user._id);
+
+		if (!user) {
+			return res.status(404).json({ error: 'Nie znaleziono użytkownika' });
+		}
+
+		if (!mongoose.isValidObjectId(movie_id)) {
+			return res
+				.status(400)
+				.json({ error: 'Nieprawidłowy identyfikator filmu' });
+		}
+
+		const movieExists = await Movie.findOne({ _id: movie_id });
+
+		if (!movieExists) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		await User.findByIdAndUpdate(req.user._id, {
+			$pull: { ignored_movies: movie_id },
+		});
+
+		res
+			.status(200)
+			.json({ message: 'Film został usunięty z listy ignorowanych' });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
@@ -255,6 +448,12 @@ module.exports = {
 	getUserFavoriteMovies,
 	addFavoriteMovie,
 	deleteFavoriteMovie,
+	getUserWatchlistMovies,
+	addWatchlistMovie,
+	deleteWatchlistMovie,
+	getUserIgnoredMovies,
+	addIgnoredMovie,
+	deleteIgnoredMovie,
 	getUsers,
 	deleteUser,
 };

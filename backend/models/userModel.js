@@ -25,6 +25,18 @@ const userSchema = new mongoose.Schema(
 				ref: 'Movie',
 			},
 		],
+		watchlist_movies: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Movie',
+			},
+		],
+		ignored_movies: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Movie',
+			},
+		],
 	},
 	{
 		timestamps: true,

@@ -1,17 +1,17 @@
 import { useAuthContext } from '../contexts/AuthProvider';
 import { useState } from 'react';
 
-const usePost = () => {
+const useUpdate = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [message, setMessage] = useState('');
 	const { user } = useAuthContext();
 
-	const postData = async (endpoint, data) => {
+	const updateData = async (endpoint, data) => {
 		setIsLoading(true);
 		setMessage('');
 
 		const response = await fetch(`http://localhost:5000/api/${endpoint}`, {
-			method: 'POST',
+			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${user.token}`,
@@ -30,7 +30,7 @@ const usePost = () => {
 		}
 	};
 
-	return { postData, isLoading, message };
+	return { updateData, isLoading, message };
 };
 
-export default usePost;
+export default useUpdate;

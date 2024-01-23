@@ -1,6 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const moviesData = require('../data/movies');
 const Movie = require('../models/movieModel');
+const User = require('../models/userModel');
 
 const importMovies = async (req, res) => {
 	try {
@@ -25,6 +26,12 @@ const getMovies = async (req, res) => {
 	try {
 		const { query, genre, year, rate, order_by, order } = req.query;
 		const filterOptions = {};
+		let userIgnoredMovies;
+
+		if (req.user) {
+			const user = await User.findById(req.user._id);
+			userIgnoredMovies = user.ignored_movies;
+		}
 
 		if (query) {
 			filterOptions.$or = [
@@ -51,12 +58,18 @@ const getMovies = async (req, res) => {
 		const page = parseInt(req.query.page) || 1;
 		const pageLimit = 2;
 		const moviesSkip = (page - 1) * pageLimit;
-		const movies = await Movie.find(filterOptions)
+		const movies = await Movie.find({
+			...filterOptions,
+			_id: { $nin: userIgnoredMovies },
+		})
 			.sort({ ...orderOptions, _id: 1 })
 			.skip(moviesSkip)
 			.limit(pageLimit);
 
-		const moviesCount = await Movie.countDocuments(filterOptions);
+		const moviesCount = await Movie.countDocuments({
+			...filterOptions,
+			_id: { $nin: userIgnoredMovies },
+		});
 		const totalPages = Math.ceil(moviesCount / pageLimit);
 
 		res.status(200).json({ movies, moviesCount, page, totalPages });

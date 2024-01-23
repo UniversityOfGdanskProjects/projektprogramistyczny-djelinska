@@ -11,7 +11,7 @@ const MovieList = ({ moviesData }) => {
 			</p>
 			<div className='flex flex-col gap-6 mt-4'>
 				{movies.map((movie) => (
-					<MovieCard key={movie._id} movie={movie} />
+					<MovieCard key={movie._id} movie={movie} simple={false} type='list' />
 				))}
 			</div>
 		</div>

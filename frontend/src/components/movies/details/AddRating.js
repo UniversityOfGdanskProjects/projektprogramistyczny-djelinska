@@ -15,12 +15,14 @@ const AddRating = ({ movieId, handleChange }) => {
 	const handleAddRating = async () => {
 		setError('');
 
-		if (user && !isLoading) {
-			try {
-				await postData('rate/add', { movie_id: movieId, rate: stars });
-				handleChange();
-			} catch (err) {
-				setError(err.message);
+		if (user) {
+			if (!isLoading) {
+				try {
+					await postData('movies/rate/add', { movie_id: movieId, rate: stars });
+					handleChange();
+				} catch (err) {
+					setError(err.message);
+				}
 			}
 		} else {
 			navigate('/login');

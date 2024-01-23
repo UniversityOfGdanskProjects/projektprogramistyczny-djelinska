@@ -14,13 +14,18 @@ const AddComment = ({ movieId, handleChange }) => {
 		e.preventDefault();
 		setError('');
 
-		if (user && !isLoading) {
-			try {
-				await postData('comment/add', { movie_id: movieId, comment: comment });
-				handleChange();
-				setComment('');
-			} catch (err) {
-				setError(err.message);
+		if (user) {
+			if (!isLoading) {
+				try {
+					await postData('movies/comment/add', {
+						movie_id: movieId,
+						comment: comment,
+					});
+					handleChange();
+					setComment('');
+				} catch (err) {
+					setError(err.message);
+				}
 			}
 		} else {
 			navigate('/login');

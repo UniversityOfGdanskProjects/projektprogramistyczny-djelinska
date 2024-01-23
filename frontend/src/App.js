@@ -3,12 +3,12 @@ import {
 	Route,
 	BrowserRouter as Router,
 	Routes,
-	useLocation,
 } from 'react-router-dom';
 
 import FavoriteMovies from './pages/FavoriteMovies';
 import Footer from './components/footer/Footer';
 import Home from './pages/Home';
+import IgnoredMovies from './pages/IgnoredMovies';
 import LoginForm from './pages/LoginForm';
 import MovieDetails from './pages/MovieDetails';
 import Movies from './pages/Movies';
@@ -49,6 +49,10 @@ function App() {
 					<Route
 						path='/profil/zapisane'
 						element={user ? <WatchListMovies /> : <Navigate to='/login' />}
+					/>
+					<Route
+						path='/profil/ignorowane'
+						element={user ? <IgnoredMovies /> : <Navigate to='/login' />}
 					/>
 					<Route path='*' element={<NotFound />} />
 				</Routes>

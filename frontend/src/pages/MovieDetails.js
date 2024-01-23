@@ -19,7 +19,6 @@ const MovieDetails = () => {
 	const { fetchData, error } = useFetch();
 	const { convertMovieTime } = useMoviesContext();
 	const { id } = useParams();
-	const [changed, setChanged] = useState(false);
 
 	const getMovie = async () => {
 		const movie = await fetchData(`movies/movie/${id}`);

@@ -26,6 +26,25 @@ const requireToken = async (req, res, next) => {
 	}
 };
 
+const assignToken = async (req, res, next) => {
+	const { authorization } = req.headers;
+
+	if (authorization) {
+		const token = authorization.split(' ')[1];
+
+		try {
+			const { _id } = jwt.verify(token, process.env.TOKEN_SECRET);
+
+			req.user = await User.findById(_id);
+		} catch (error) {
+			console.log(error);
+			res.status(401).json({ error: 'Nieudana autoryzacja' });
+		}
+	}
+
+	next();
+};
+
 const checkAdmin = async (req, res, next) => {
 	if (req.user && req.user.is_admin) {
 		next();
@@ -36,4 +55,4 @@ const checkAdmin = async (req, res, next) => {
 	}
 };
 
-module.exports = { createToken, requireToken, checkAdmin };
+module.exports = { createToken, requireToken, assignToken, checkAdmin };
