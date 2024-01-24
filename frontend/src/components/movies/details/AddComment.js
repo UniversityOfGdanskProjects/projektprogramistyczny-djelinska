@@ -35,7 +35,7 @@ const AddComment = ({ movieId, handleChange }) => {
 
 	return (
 		<div>
-			<h3 className='w-full text-xl font-semibold mb-4'>Dodaj komentarz</h3>
+			<h3 className='w-full mb-4'>Dodaj komentarz</h3>
 			<form
 				method='post'
 				onSubmit={handleAddComment}

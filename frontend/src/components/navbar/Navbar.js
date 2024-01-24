@@ -2,7 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 import Logo from '../common/Logo';
 import Profile from './Profile';
-import SearchBar from './SearchBar';
 import { useAuthContext } from '../../contexts/AuthProvider';
 
 const Navbar = () => {
@@ -30,6 +29,9 @@ const Navbar = () => {
 						{link.name}
 					</Link>
 				))}
+				{user && !user.is_user ? (
+					<Link to='/panel'>Panel zarządzania</Link>
+				) : null}
 			</div>
 			{!user ? (
 				<>

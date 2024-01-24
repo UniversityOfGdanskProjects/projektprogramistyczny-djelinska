@@ -76,8 +76,8 @@ const ProfileInfo = () => {
 
 	return (
 		<div className='pt-navbar mt-6 w-full max-w-screen-lg'>
-			<h3 className='text-xl font-semibold mb-6'>Konto</h3>
-			<h4 className='text-lg font-medium mb-4 text-center'>Zmień hasło</h4>
+			<h2 className='mb-6'>Konto</h2>
+			<h3 className='mb-4 text-center'>Zmień hasło</h3>
 			<form
 				method='post'
 				onSubmit={handleSubmit}
@@ -125,7 +125,7 @@ const ProfileInfo = () => {
 				{error.update && <InlineError error={error.update} />}
 				{updateMessage && <InlineMessage message={updateMessage} />}
 			</form>
-			<h4 className='text-lg font-medium mb-4 text-center'>Usuń konto</h4>
+			<h3 className='mb-4 text-center'>Usuń konto</h3>
 			<button
 				onClick={handleDeleteAccount}
 				disabled={deleteLoading}

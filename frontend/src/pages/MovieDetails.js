@@ -44,7 +44,7 @@ const MovieDetails = () => {
 								/>
 							</div>
 							<div className='flex flex-col justify-center'>
-								<h3 className='font-semibold text-3xl'>{movie.title}</h3>
+								<h4 className='text-3xl'>{movie.title}</h4>
 								<div className='flex items-center gap-4 my-4'>
 									<IconText
 										icon={PiClockBold}
@@ -84,7 +84,7 @@ const MovieDetails = () => {
 							<MovieTrailer videoUrl={movie.video_url} title={movie.title} />
 						)}
 						<div>
-							<h3 className='text-xl font-semibold mb-4'>Główni aktorzy</h3>
+							<h3 className='mb-4'>Główni aktorzy</h3>
 							<div className='grid grid-cols-4 gap-6'>
 								{movie.actors.map((actor) => (
 									<ActorCard key={actor._id} actor={actor} />

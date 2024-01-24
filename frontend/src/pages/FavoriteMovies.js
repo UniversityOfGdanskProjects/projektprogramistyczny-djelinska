@@ -20,7 +20,7 @@ const FavoriteMovies = () => {
 
 	return (
 		<div className='w-full pt-navbar mt-6 max-w-screen-lg'>
-			<h3 className='text-xl font-semibold mb-4'>Lista ulubionych filmów</h3>
+			<h2 className='mb-4'>Lista ulubionych filmów</h2>
 			{isLoading && <LoadingMessage message='Ładowanie filmów...' />}
 			{error && <InlineError error={error} />}
 			{favorites.length > 0 ? (

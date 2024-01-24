@@ -62,7 +62,7 @@ const AddMovieForm = () => {
 		});
 	return (
 		<div>
-			<h3 className='font-semibold mt-6 mb-4'>Dodaj film</h3>
+			<h3 className='mt-6 mb-4'>Dodaj film</h3>
 			<form
 				method='post'
 				onSubmit={handleSubmit}

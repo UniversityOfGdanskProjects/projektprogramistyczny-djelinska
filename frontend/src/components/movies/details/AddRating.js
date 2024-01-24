@@ -29,7 +29,7 @@ const AddRating = ({ movieId, handleChange }) => {
 
 	return (
 		<div className='flex flex-wrap'>
-			<h3 className='w-full text-xl font-semibold mb-4'>Dodaj ocenę filmu</h3>
+			<h3 className='w-full mb-4'>Dodaj ocenę filmu</h3>
 			<div className='flex items-center gap-4 w-1/2'>
 				{Array.from({ length: 5 }, (_, index) => (
 					<Star
