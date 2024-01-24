@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-
+import InlineError from '../../common/InlineError';
+import InlineMessage from '../../common/InlineMessage';
 import Star from './Star';
 import { useAuthContext } from '../../../contexts/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import usePost from '../../../hooks/usePost';
+import { useState } from 'react';
 
 const AddRating = ({ movieId, handleChange }) => {
 	const [stars, setStars] = useState(0);
@@ -12,17 +13,14 @@ const AddRating = ({ movieId, handleChange }) => {
 	const { postData, isLoading, message } = usePost();
 	const [error, setError] = useState('');
 
-	const handleAddRating = async () => {
+	const handleAddRating = () => {
 		setError('');
 
 		if (user) {
 			if (!isLoading) {
-				try {
-					await postData('movies/rate/add', { movie_id: movieId, rate: stars });
-					handleChange();
-				} catch (err) {
-					setError(err.message);
-				}
+				postData('movies/rate/add', { movie_id: movieId, rate: stars })
+					.then(() => handleChange())
+					.catch((err) => setError(err.message));
 			}
 		} else {
 			navigate('/login');
@@ -44,12 +42,14 @@ const AddRating = ({ movieId, handleChange }) => {
 			<button
 				onClick={handleAddRating}
 				className='default-button'
-				disabled={isLoading}
+				disabled={isLoading || stars < 1}
 			>
 				Dodaj ocenę
 			</button>
-			{error && <div className='w-full text-sm mt-4'>{error}</div>}
-			{message && <div className='w-full text-sm'>{message}</div>}
+			<div className='w-full mt-4'>
+				{error && <InlineError error={error} />}
+				{message && <InlineMessage message={message} />}
+			</div>
 		</div>
 	);
 };

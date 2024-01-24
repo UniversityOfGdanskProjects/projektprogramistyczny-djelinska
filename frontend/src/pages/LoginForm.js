@@ -2,6 +2,7 @@ import * as yup from 'yup';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import InlineError from '../components/common/InlineError';
 import useAuthorize from '../hooks/useAuthorize';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -20,15 +21,14 @@ const LoginForm = () => {
 				username: yup.string().required('Nazwa użytkownika jest wymagana'),
 				password: yup.string().required('Hasło jest wymagane'),
 			}),
-			onSubmit: async (values, { resetForm }) => {
+			onSubmit: (values, { resetForm }) => {
 				if (!isLoading) {
-					try {
-						await authorize('login', values);
-						resetForm();
-						navigate('/');
-					} catch (err) {
-						setError(err.message);
-					}
+					authorize('login', values)
+						.then(() => {
+							resetForm();
+							navigate('/');
+						})
+						.catch((err) => setError(err.message));
 				}
 			},
 		});
@@ -54,7 +54,7 @@ const LoginForm = () => {
 							{...getFieldProps('username')}
 						/>
 						{touched.username && errors.username && (
-							<div className='form-error'>{errors.username}</div>
+							<InlineError error={errors.username} />
 						)}
 					</div>
 					<div className='form-field-wrapper'>
@@ -70,7 +70,7 @@ const LoginForm = () => {
 							{...getFieldProps('password')}
 						/>
 						{touched.password && errors.password && (
-							<div className='form-error'>{errors.password}</div>
+							<InlineError error={errors.password} />
 						)}
 					</div>
 					<button
@@ -80,7 +80,7 @@ const LoginForm = () => {
 					>
 						Zaloguj
 					</button>
-					{error && <div className='form-error'>{error}</div>}
+					{error && <InlineError error={error} />}
 				</form>
 				<div className='mt-6 text-center'>
 					Nie masz konta?{' '}

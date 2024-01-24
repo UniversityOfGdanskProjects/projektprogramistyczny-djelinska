@@ -80,7 +80,9 @@ const MovieDetails = () => {
 								<MovieOptions />
 							</div>
 						</div>
-						<MovieTrailer videoUrl={movie.video_url} title={movie.title} />
+						{movie.video_url && (
+							<MovieTrailer videoUrl={movie.video_url} title={movie.title} />
+						)}
 						<div>
 							<h3 className='text-xl font-semibold mb-4'>Główni aktorzy</h3>
 							<div className='grid grid-cols-4 gap-6'>

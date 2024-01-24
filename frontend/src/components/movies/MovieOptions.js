@@ -1,5 +1,7 @@
 import { PiBookmarkSimpleBold, PiHeartBold, PiMinusBold } from 'react-icons/pi';
 
+import InlineError from '../common/InlineError';
+import InlineMessage from '../common/InlineMessage';
 import { useAuthContext } from '../../contexts/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -11,33 +13,28 @@ const MovieOptions = ({ movieId, type, handleChange }) => {
 	const { user } = useAuthContext();
 	const navigate = useNavigate();
 
-	const handleAddTo = async (listType) => {
+	const handleAddTo = (listType) => {
 		setError('');
 
 		if (user) {
 			if (!isLoading) {
-				try {
-					await updateData(`users/${listType}/add`, { movie_id: movieId });
-				} catch (err) {
-					setError(err.message);
-				}
+				updateData(`users/${listType}/add`, { movie_id: movieId }).catch(
+					(err) => setError(err.message)
+				);
 			}
 		} else {
 			navigate('/login');
 		}
 	};
 
-	const handleDeleteFrom = async (listType) => {
+	const handleDeleteFrom = (listType) => {
 		setError('');
 
 		if (user) {
 			if (!isLoading) {
-				try {
-					await updateData(`users/${listType}/delete`, { movie_id: movieId });
-					handleChange();
-				} catch (err) {
-					setError(err.message);
-				}
+				updateData(`users/${listType}/delete`, { movie_id: movieId })
+					.then(() => handleChange())
+					.catch((err) => setError(err.message));
 			}
 		} else {
 			navigate('/login');
@@ -83,8 +80,10 @@ const MovieOptions = ({ movieId, type, handleChange }) => {
 					</button>
 				)}
 			</div>
-			{error && <div className='w-full text-sm mt-4'>{error}</div>}
-			{message && <div className='w-full text-sm mt-4'>{message}</div>}
+			<div className='mt-4'>
+				{error && <InlineError error={error} />}
+				{message && <InlineMessage message={message} />}
+			</div>
 		</div>
 	);
 };

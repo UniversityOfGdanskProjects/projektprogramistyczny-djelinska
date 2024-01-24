@@ -96,15 +96,11 @@ const updateUserAccount = async (req, res) => {
 			updateFields.password = hashedPassword;
 		}
 
-		const updatedUser = await User.findByIdAndUpdate(
-			req.user._id,
-			{ $set: updateFields },
-			{ new: true }
-		);
+		await User.findByIdAndUpdate(req.user._id, {
+			$set: updateFields,
+		});
 
-		res
-			.status(200)
-			.json({ message: 'Hasło zostało zmienione', user: updatedUser });
+		res.status(200).json({ message: 'Hasło zostało zmienione' });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });

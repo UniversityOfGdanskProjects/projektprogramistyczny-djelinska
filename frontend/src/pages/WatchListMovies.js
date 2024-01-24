@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import InlineError from '../components/common/InlineError';
+import LoadingMessage from '../components/common/LoadingMessage';
 import MovieCard from '../components/movies/MovieCard';
 import useFetch from '../hooks/useFetch';
 
@@ -19,10 +21,10 @@ const WatchListMovies = () => {
 	return (
 		<div className='w-full pt-navbar mt-6 max-w-screen-lg'>
 			<h3 className='text-xl font-semibold mb-4'>Lista filmów do obejrzenia</h3>
-			{isLoading && <div>Ładowanie filmów...</div>}
-			{error && <div>{error} </div>}
+			{isLoading && <LoadingMessage message='Ładowanie filmów...' />}
+			{error && <InlineError error={error} />}
 			{watchlist.length > 0 ? (
-				<div className='grid grid-cols-2 gap-6'>
+				<div className='grid grid-cols-2 gap-6 mt-4'>
 					{watchlist.map((movie) => (
 						<MovieCard
 							movie={movie}
@@ -33,7 +35,7 @@ const WatchListMovies = () => {
 					))}
 				</div>
 			) : (
-				<div>Brak zapisanych filmów do objerzenia</div>
+				<div>Brak filmów zapisanych do obejrzenia</div>
 			)}
 		</div>
 	);

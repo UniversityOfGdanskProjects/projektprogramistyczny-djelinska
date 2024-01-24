@@ -1,10 +1,14 @@
 import * as yup from 'yup';
 
+import InlineError from '../common/InlineError';
+import InlineMessage from '../common/InlineMessage';
 import { useFormik } from 'formik';
 import usePost from '../../hooks/usePost';
+import { useState } from 'react';
 
 const AddMovieForm = () => {
-	const { postData } = usePost();
+	const { postData, isLoading, message } = usePost();
+	const [error, setError] = useState('');
 	const { errors, touched, dirty, isValid, getFieldProps, handleSubmit } =
 		useFormik({
 			initialValues: {
@@ -40,17 +44,25 @@ const AddMovieForm = () => {
 					.min(0, 'Czas trwania filmu jest za krótki')
 					.required('Czas trwania filmu jest wymagany'),
 				director: yup.string().required('Reżyser filmu jest wymagany'),
-				poster_image: yup.string().url('Nieprawidłowy adres url').required('Adres url zdjęcia jest wymagany'),
+				poster_image: yup
+					.string()
+					.url('Nieprawidłowy adres url')
+					.required('Adres url zdjęcia jest wymagany'),
 				video_url: yup.string().url('Nieprawidłowy adres url'),
 			}),
-			onSubmit: async (values, { resetForm }) => {
-				await postData('admin/movies', values);
-				resetForm();
+			onSubmit: (values, { resetForm }) => {
+				if (!isLoading) {
+					postData('admin/movies', values)
+						.then(() => {
+							resetForm();
+						})
+						.catch((err) => setError(err.message));
+				}
 			},
 		});
 	return (
 		<div>
-			<h3 className='font-semibold mb-6'>Dodaj film</h3>
+			<h3 className='font-semibold mt-6 mb-4'>Dodaj film</h3>
 			<form
 				method='post'
 				onSubmit={handleSubmit}
@@ -69,7 +81,7 @@ const AddMovieForm = () => {
 						{...getFieldProps('title')}
 					/>
 					{touched.title && errors.title && (
-						<div className='form-error'>{errors.title}</div>
+						<InlineError error={errors.title} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -77,14 +89,14 @@ const AddMovieForm = () => {
 						Opis
 					</label>
 					<textarea
-						className='form-input'
+						className='form-input resize-none'
 						id='description'
 						name='description'
 						placeholder='Podaj opis filmu'
 						{...getFieldProps('description')}
 					></textarea>
 					{touched.description && errors.description && (
-						<div className='form-error'>{errors.description}</div>
+						<InlineError error={errors.description} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -100,7 +112,7 @@ const AddMovieForm = () => {
 						{...getFieldProps('genre')}
 					/>
 					{touched.genre && errors.genre && (
-						<div className='form-error'>{errors.genre}</div>
+						<InlineError error={errors.genre} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -116,7 +128,7 @@ const AddMovieForm = () => {
 						{...getFieldProps('release_year')}
 					/>
 					{touched.release_year && errors.release_year && (
-						<div className='form-error'>{errors.release_year}</div>
+						<InlineError error={errors.release_year} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -132,7 +144,7 @@ const AddMovieForm = () => {
 						{...getFieldProps('duration_time')}
 					/>
 					{touched.duration_time && errors.duration_time && (
-						<div className='form-error'>{errors.duration_time}</div>
+						<InlineError error={errors.duration_time} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -148,7 +160,7 @@ const AddMovieForm = () => {
 						{...getFieldProps('director')}
 					/>
 					{touched.director && errors.director && (
-						<div className='form-error'>{errors.director}</div>
+						<InlineError error={errors.director} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -164,7 +176,7 @@ const AddMovieForm = () => {
 						{...getFieldProps('poster_image')}
 					/>
 					{touched.poster_image && errors.poster_image && (
-						<div className='form-error'>{errors.poster_image}</div>
+						<InlineError error={errors.poster_image} />
 					)}
 				</div>
 				<div className='form-field-wrapper'>
@@ -180,16 +192,18 @@ const AddMovieForm = () => {
 						{...getFieldProps('video_url')}
 					/>
 					{touched.video_url && errors.video_url && (
-						<div className='form-error'>{errors.video_url}</div>
+						<InlineError error={errors.video_url} />
 					)}
 				</div>
 				<button
 					type='submit'
 					disabled={!(isValid && dirty)}
-					className='default-button'
+					className='default-button w-fit'
 				>
 					Dodaj film
 				</button>
+				{error && <InlineError error={error} />}
+				{message && <InlineMessage message={message} />}
 			</form>
 		</div>
 	);

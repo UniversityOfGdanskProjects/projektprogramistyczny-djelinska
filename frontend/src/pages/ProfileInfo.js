@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import InlineError from '../components/common/InlineError';
+import InlineMessage from '../components/common/InlineMessage';
 import { useAuthContext } from '../contexts/AuthProvider';
 import useDelete from '../hooks/useDelete';
 import { useFormik } from 'formik';
@@ -9,15 +11,15 @@ import { useState } from 'react';
 import useUpdate from '../hooks/useUpdate';
 
 const ProfileInfo = () => {
+	const navigate = useNavigate();
 	const { deleteData, isLoading: deleteLoading } = useDelete();
 	const {
 		updateData,
 		isLoading: updateLoading,
 		message: updateMessage,
 	} = useUpdate();
-	const [error, setError] = useState('');
-	const navigate = useNavigate();
-	const { user, logoutUser } = useAuthContext();
+	const [error, setError] = useState({ update: '', delete: '' });
+	const { user } = useAuthContext();
 	const { logout } = useLogout();
 	const { errors, touched, dirty, isValid, getFieldProps, handleSubmit } =
 		useFormik({
@@ -39,28 +41,33 @@ const ProfileInfo = () => {
 					.required('Nowe hasło jest wymagane'),
 			}),
 			onSubmit: async (values, { resetForm }) => {
-				if (!updateLoading) {
-					try {
-						await updateData('users/account/update', values);
-						resetForm();
-					} catch (err) {
-						setError(err.message);
+				if (user) {
+					if (!updateLoading) {
+						updateData('users/account/update', values)
+							.then(() => {
+								resetForm();
+								setError((prevError) => ({ ...prevError, update: '' }));
+							})
+							.catch((err) =>
+								setError((prevError) => ({ ...prevError, update: err.message }))
+							);
 					}
+				} else {
+					navigate('/');
 				}
 			},
 		});
 
-	const handleDeleteAccount = async () => {
+	const handleDeleteAccount = () => {
 		if (user) {
 			if (!deleteLoading) {
-				try {
-					await deleteData('users/account/delete');
-					logout();
-					logoutUser();
-					navigate('/');
-				} catch (err) {
-					setError(err.message);
-				}
+				deleteData('users/account/delete')
+					.then(() => {
+						logout();
+					})
+					.catch((err) =>
+						setError((prevError) => ({ ...prevError, delete: err.message }))
+					);
 			}
 		} else {
 			navigate('/');
@@ -70,15 +77,14 @@ const ProfileInfo = () => {
 	return (
 		<div className='pt-navbar mt-6 w-full max-w-screen-lg'>
 			<h3 className='text-xl font-semibold mb-6'>Konto</h3>
-			{error && <div className='text-sm mb-4'>{error} </div>}
 			<h4 className='text-lg font-medium mb-4 text-center'>Zmień hasło</h4>
 			<form
 				method='post'
 				onSubmit={handleSubmit}
 				className='flex flex-col gap-4'
 			>
-				<div>
-					<label htmlFor='currentPassword' className='mr-6'>
+				<div className='form-field-wrapper'>
+					<label htmlFor='currentPassword' className='text-sm'>
 						Obecne hasło
 					</label>
 					<input
@@ -90,11 +96,11 @@ const ProfileInfo = () => {
 						className='form-input'
 					/>
 					{touched.currentPassword && errors.currentPassword && (
-						<div className='text-sm mt-4'>{errors.currentPassword}</div>
+						<InlineError error={errors.currentPassword} />
 					)}
 				</div>
-				<div>
-					<label htmlFor='newPassword' className='mr-6'>
+				<div className='form-field-wrapper'>
+					<label htmlFor='newPassword' className='text-sm'>
 						Nowe hasło
 					</label>
 					<input
@@ -106,7 +112,7 @@ const ProfileInfo = () => {
 						className='form-input'
 					/>
 					{touched.newPassword && errors.newPassword && (
-						<div className='text-sm mt-4'>{errors.newPassword}</div>
+						<InlineError error={errors.newPassword} />
 					)}
 				</div>
 				<button
@@ -116,16 +122,18 @@ const ProfileInfo = () => {
 				>
 					Zmień hasło
 				</button>
+				{error.update && <InlineError error={error.update} />}
+				{updateMessage && <InlineMessage message={updateMessage} />}
 			</form>
-			{updateMessage && <div className='mt-4'>{updateMessage}</div>}
 			<h4 className='text-lg font-medium mb-4 text-center'>Usuń konto</h4>
 			<button
 				onClick={handleDeleteAccount}
 				disabled={deleteLoading}
-				className='default-button'
+				className='default-button mb-4'
 			>
 				Usuń konto
 			</button>
+			{error.delete && <InlineError error={error.delete} />}
 		</div>
 	);
 };

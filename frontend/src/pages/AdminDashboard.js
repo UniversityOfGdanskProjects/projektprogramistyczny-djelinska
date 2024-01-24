@@ -10,7 +10,7 @@ const AdminDashboard = () => {
 	return (
 		<div className='pt-navbar my-6 w-full max-w-screen-lg'>
 			<h3 className='text-lg font-semibold mb-4'>Panel zarządzania</h3>
-			<div className='flex gap-6 mb-6'>
+			<div className='flex gap-6 mb-4'>
 				<button
 					onClick={() => setDataType('addMovie')}
 					className='default-button'

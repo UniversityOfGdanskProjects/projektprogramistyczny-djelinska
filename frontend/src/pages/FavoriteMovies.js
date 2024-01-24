@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import InlineError from '../components/common/InlineError';
+import LoadingMessage from '../components/common/LoadingMessage';
 import MovieCard from '../components/movies/MovieCard';
 import useFetch from '../hooks/useFetch';
 
@@ -19,12 +21,13 @@ const FavoriteMovies = () => {
 	return (
 		<div className='w-full pt-navbar mt-6 max-w-screen-lg'>
 			<h3 className='text-xl font-semibold mb-4'>Lista ulubionych filmów</h3>
-			{isLoading && <div>Ładowanie filmów...</div>}
-			{error && <div>{error} </div>}
+			{isLoading && <LoadingMessage message='Ładowanie filmów...' />}
+			{error && <InlineError error={error} />}
 			{favorites.length > 0 ? (
-				<div className='grid grid-cols-2 gap-6'>
+				<div className='grid grid-cols-2 gap-6 mt-4'>
 					{favorites.map((movie) => (
 						<MovieCard
+							key={movie._id}
 							movie={movie}
 							simple={true}
 							type='favorites'

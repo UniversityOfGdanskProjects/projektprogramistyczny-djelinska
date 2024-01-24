@@ -2,6 +2,7 @@ import * as yup from 'yup';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import InlineError from '../components/common/InlineError';
 import useAuthorize from '../hooks/useAuthorize';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -42,16 +43,14 @@ const SignupForm = () => {
 					)
 					.required('Hasło jest wymagane'),
 			}),
-			onSubmit: async (values, { resetForm }) => {
-				console.log(values);
+			onSubmit: (values, { resetForm }) => {
 				if (!isLoading) {
-					try {
-						await authorize('register', values);
-						resetForm();
-						navigate('/');
-					} catch (err) {
-						setError(err.message);
-					}
+					authorize('register', values)
+						.then(() => {
+							resetForm();
+							navigate('/');
+						})
+						.catch((err) => setError(err.message));
 				}
 			},
 		});
@@ -77,7 +76,7 @@ const SignupForm = () => {
 							{...getFieldProps('username')}
 						/>
 						{touched.username && errors.username && (
-							<div className='form-error'>{errors.username}</div>
+							<InlineError error={errors.username} />
 						)}
 					</div>
 					<div className='form-field-wrapper'>
@@ -93,7 +92,7 @@ const SignupForm = () => {
 							{...getFieldProps('email')}
 						/>
 						{touched.email && errors.email && (
-							<div className='form-error'>{errors.email}</div>
+							<InlineError error={errors.email} />
 						)}
 					</div>
 					<div className='form-field-wrapper'>
@@ -109,7 +108,7 @@ const SignupForm = () => {
 							{...getFieldProps('password')}
 						/>
 						{touched.password && errors.password && (
-							<div className='form-error'>{errors.password}</div>
+							<InlineError error={errors.password} />
 						)}
 					</div>
 					<button
@@ -119,7 +118,7 @@ const SignupForm = () => {
 					>
 						Zarejestruj
 					</button>
-					{error && <div className='form-error'>{error}</div>}
+					{error && <InlineError error={error} />}
 				</form>
 				<div className='mt-6 text-center'>
 					Masz już konto?{' '}

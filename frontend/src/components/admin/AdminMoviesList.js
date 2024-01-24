@@ -2,28 +2,34 @@ import {
 	PiCheckBold,
 	PiNotePencilFill,
 	PiTrashSimpleBold,
-	PiTrashSimpleFill,
 } from 'react-icons/pi';
 import { useEffect, useState } from 'react';
 
+import InlineError from '../common/InlineError';
+import InlineMessage from '../common/InlineMessage';
+import { useAuthContext } from '../../contexts/AuthProvider';
 import useDelete from '../../hooks/useDelete';
 import useFetch from '../../hooks/useFetch';
+import { useNavigate } from 'react-router-dom';
 import useUpdate from '../../hooks/useUpdate';
 
 const AdminMoviesList = () => {
 	const [movies, setMovies] = useState(null);
-	const { fetchData, isLoading, error } = useFetch();
+	const { fetchData, isLoading: fetchLoading, error: fetchError } = useFetch();
 	const [editedMovie, setEditedMovie] = useState(null);
-	const initial = {
-		title: '',
-		description: '',
-		genre: '',
-		release_year: '',
-		duration_time: '',
-		director: '',
-	};
-	const { deleteData } = useDelete();
-	const { updateData } = useUpdate();
+	const {
+		deleteData,
+		isLoading: deleteLoading,
+		message: deleteMessage,
+	} = useDelete();
+	const {
+		updateData,
+		isLoading: updateLoading,
+		message: updateMessage,
+	} = useUpdate();
+	const [error, setError] = useState({ update: '', delete: '' });
+	const { user } = useAuthContext();
+	const navigate = useNavigate();
 
 	const getMovies = async () => {
 		const movies = await fetchData('admin/movies');
@@ -49,26 +55,54 @@ const AdminMoviesList = () => {
 		});
 	};
 
-	const handleEditSave = async () => {
-		await updateData('admin/movies', editedMovie);
-		setEditedMovie(null);
-		getMovies();
+	const handleEditSave = () => {
+		setError({ update: '', delete: '' });
+
+		if (user) {
+			if (!updateLoading) {
+				updateData('admin/movies', editedMovie)
+					.then(() => {
+						setEditedMovie(null);
+						getMovies();
+					})
+					.catch((err) =>
+						setError((prevError) => ({ ...prevError, update: err.message }))
+					);
+			}
+		} else {
+			navigate('/');
+		}
 	};
 
-	const handleDelete = async (movieId) => {
-		await deleteData(`admin/movies/${movieId}`);
-		getMovies();
+	const handleDelete = (movieId) => {
+		setError({ update: '', delete: '' });
+
+		if (user) {
+			if (!deleteLoading) {
+				deleteData(`admin/movies/${movieId}`)
+					.then(() => getMovies())
+					.catch((err) =>
+						setError((prevError) => ({ ...prevError, delete: err.message }))
+					);
+			}
+		} else {
+			navigate('/');
+		}
 	};
 
 	useEffect(() => {
-		if (!isLoading) {
+		if (!fetchLoading) {
 			getMovies();
 		}
 	}, []);
 
 	return (
 		<div>
-			{error && <div>{error}</div>}
+			{fetchError && <InlineError error={fetchError} />}
+			{error.delete && <InlineError error={error.delete} />}
+			{error.update && <InlineError error={error.update} />}
+			{deleteMessage && <InlineMessage message={deleteMessage} />}
+			{updateMessage && <InlineMessage message={updateMessage} />}
 			{movies && (
 				<table>
 					<thead>

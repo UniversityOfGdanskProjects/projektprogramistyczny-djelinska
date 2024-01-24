@@ -1,3 +1,5 @@
+import InlineError from '../../common/InlineError';
+import InlineMessage from '../../common/InlineMessage';
 import { useAuthContext } from '../../../contexts/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import usePost from '../../../hooks/usePost';
@@ -10,22 +12,21 @@ const AddComment = ({ movieId, handleChange }) => {
 	const { postData, isLoading, message } = usePost();
 	const [error, setError] = useState('');
 
-	const handleAddComment = async (e) => {
+	const handleAddComment = (e) => {
 		e.preventDefault();
 		setError('');
 
 		if (user) {
 			if (!isLoading) {
-				try {
-					await postData('movies/comment/add', {
-						movie_id: movieId,
-						comment: comment,
-					});
-					handleChange();
-					setComment('');
-				} catch (err) {
-					setError(err.message);
-				}
+				postData('movies/comment/add', {
+					movie_id: movieId,
+					comment: comment,
+				})
+					.then(() => {
+						handleChange();
+						setComment('');
+					})
+					.catch((err) => setError(err.message));
 			}
 		} else {
 			navigate('/login');
@@ -48,11 +49,17 @@ const AddComment = ({ movieId, handleChange }) => {
 					onChange={(e) => setComment(e.target.value)}
 					className='form-textarea w-full max-w-96 mr-2'
 				></textarea>
-				<button type='submit' className='default-button h-fit'>
+				<button
+					type='submit'
+					disabled={!comment}
+					className='default-button h-fit'
+				>
 					Dodaj komentarz
 				</button>
-				{error && <div className='w-full text-sm'>{error}</div>}
-				{message && <div className='w-full text-sm'>{message}</div>}
+				<div className='w-full'>
+					{error && <InlineError error={error} />}
+					{message && <InlineMessage message={message} />}
+				</div>
 			</form>
 		</div>
 	);

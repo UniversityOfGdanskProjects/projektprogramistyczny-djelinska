@@ -53,7 +53,7 @@ button:disabled {
 }
 
 .form-input {
-	@apply px-4 py-2 bg-transparent text-white rounded-full border-2 border-gray-light placeholder:text-gray-light focus:ring-0 focus:border-white;
+	@apply max-w-96 px-4 py-2 bg-transparent text-white rounded-full border-2 border-gray-light placeholder:text-gray-light focus:ring-0 focus:border-white;
 }
 
 .form-textarea {

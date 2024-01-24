@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import InlineError from '../components/common/InlineError';
 import { Link } from 'react-router-dom';
+import LoadingMessage from '../components/common/LoadingMessage';
 import MovieOptions from '../components/movies/MovieOptions';
 import useFetch from '../hooks/useFetch';
 
@@ -20,10 +22,10 @@ const IgnoredMovies = () => {
 	return (
 		<div className='w-full pt-navbar mt-6 max-w-screen-lg'>
 			<h3 className='text-xl font-semibold mb-4'>Lista ignorowanych filmów</h3>
-			{isLoading && <div>Ładowanie filmów...</div>}
-			{error && <div>{error} </div>}
+			{isLoading && <LoadingMessage message='Ładowanie filmów...' />}
+			{error && <InlineError error={error} />}
 			{ignored.length > 0 ? (
-				<div className='grid grid-col-2 gap-6 w-full'>
+				<div className='grid grid-col-2 gap-6 w-full mt-4'>
 					{ignored.map((movie) => (
 						<div key={movie._id} className='bg-black-dark p-6 rounded-md'>
 							<Link to={`/filmy/${movie._id}`}>

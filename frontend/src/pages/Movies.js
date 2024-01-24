@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 
 import Filter from '../components/movies/filters/Filter';
+import InlineError from '../components/common/InlineError';
+import LoadingMessage from '../components/common/LoadingMessage';
 import MovieList from '../components/movies/MovieList';
 import OrderBy from '../components/movies/filters/OrderBy';
 import Pagination from '../components/movies/Pagination';
@@ -34,8 +36,8 @@ const Movies = () => {
 				<Filter />
 				<OrderBy />
 			</div>
-			{isLoading && <div>Ładowanie filmów...</div>}
-			{error && <div>{error} </div>}
+			{isLoading && <LoadingMessage message='Ładowanie filmów' />}
+			{error && <InlineError error={error} />}
 			{moviesData && (
 				<>
 					<MovieList moviesData={moviesData} />

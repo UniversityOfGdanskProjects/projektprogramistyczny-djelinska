@@ -1,35 +1,53 @@
 import { useEffect, useState } from 'react';
 
+import InlineError from '../common/InlineError';
+import InlineMessage from '../common/InlineMessage';
 import { PiTrashSimpleBold } from 'react-icons/pi';
+import { useAuthContext } from '../../contexts/AuthProvider';
 import useDelete from '../../hooks/useDelete';
 import useFetch from '../../hooks/useFetch';
+import { useNavigate } from 'react-router-dom';
 
 const AdminUsersList = () => {
 	const [users, setUsers] = useState(null);
-	const { fetchData, isLoading, error } = useFetch();
-	const { deleteData } = useDelete();
+	const { fetchData, isLoading: fetchLoading, error: fetchError } = useFetch();
+	const { deleteData, isLoading: deleteLoading, message } = useDelete();
+	const [deleteError, setDeleteError] = useState('');
+	const navigate = useNavigate();
+	const { user } = useAuthContext();
 
 	const getUsers = async () => {
 		const users = await fetchData('admin/users');
 		setUsers(users);
 	};
 
-	const handleDelete = async (userId) => {
-		await deleteData(`admin/users/${userId}`);
-		getUsers();
+	const handleDelete = (userId) => {
+		setDeleteError('');
+
+		if (user) {
+			if (!deleteLoading) {
+				deleteData(`admin/users/${userId}`)
+					.then(() => getUsers())
+					.catch((err) => setDeleteError(err.message));
+			}
+		} else {
+			navigate('/');
+		}
 	};
 
 	useEffect(() => {
-		if (!isLoading) {
+		if (!fetchLoading) {
 			getUsers();
 		}
 	}, []);
 
 	return (
 		<div>
-			{error && <div>{error}</div>}
+			{fetchError && <InlineError error={fetchError} />}
+			{deleteError && <InlineError error={deleteError} />}
+			{message && <InlineMessage message={message} />}
 			{users && (
-				<table className=''>
+				<table>
 					<thead>
 						<tr>
 							<th>Nazwa użytkownika</th>
