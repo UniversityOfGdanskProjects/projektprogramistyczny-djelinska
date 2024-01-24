@@ -41,9 +41,11 @@ const movieSchema = new mongoose.Schema(
 				},
 			},
 		],
-		poster_image: { type: String },
+		poster_image: {
+			type: String,
+			required: true,
+		},
 		video_url: { type: String },
-		images: [{ type: String }],
 		comments: [
 			{
 				user_id: {

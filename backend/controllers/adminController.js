@@ -47,9 +47,55 @@ const getMovies = async (req, res) => {
 	}
 };
 
+const addMovie = async (req, res) => {
+	try {
+		const newMovie = req.body;
+
+		await Movie.create(newMovie);
+
+		res.status(200).json({ message: 'Film został dodany' });
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const updateMovie = async (req, res) => {
+	try {
+		const {
+			id,
+			title,
+			description,
+			genre,
+			release_year,
+			duration_time,
+			director,
+		} = req.body;
+		const movie = await Movie.findById(id);
+
+		if (!movie) {
+			return res.status(404).json({ error: 'Nie znaleziono filmu' });
+		}
+
+		await Movie.findByIdAndUpdate(id, {
+			title,
+			description,
+			genre,
+			release_year,
+			duration_time,
+			director,
+		});
+
+		res.status(200).json({ message: 'Dane filmu zostały zmienione' });
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
 const deleteMovie = async (req, res) => {
 	try {
-		const movie = await User.findById(req.params.id);
+		const movie = await Movie.findById(req.params.id);
 
 		if (!movie) {
 			return res.status(404).json({ error: 'Nie znaleziono filmu' });
@@ -64,50 +110,45 @@ const deleteMovie = async (req, res) => {
 	}
 };
 
-const addMovie = async (req, res) => {
+const getComments = async (req, res) => {
 	try {
-		const newMovie = req.body;
-		await Movie.create(newMovie);
+		const movies = await Movie.find({}).populate(
+			'comments.user_id',
+			'username'
+		);
 
-		res.status(200).json({ message: 'Film został dodany' });
-	} catch (error) {
-		console.error(error.message);
-		res.status(500).json({ error: 'Coś poszło nie tak' });
-	}
-};
+		let allComments = [];
 
-const updateMovie = async (req, res) => {
-	try {
-		const { newMovie } = req.query;
-		const movie = await User.findById(movie_id);
-
-		if (!movie) {
-			return res.status(404).json({ error: 'Nie znaleziono filmu' });
-		}
-
-		await Movie.findByIdAndUpdate(req.params.id, {
-			...newMovie,
+		movies.forEach((movie) => {
+			if (movie.comments && movie.comments.length > 0) {
+				movie.comments.forEach((comment) => {
+					allComments.push({
+						id: comment._id,
+						movieTitle: movie.title,
+						username: comment.user_id.username,
+						comment: comment.comment,
+					});
+				});
+			}
 		});
 
-		res.status(200).json({ message: 'Dane filmu zostały zmienione' });
+		res.status(200).json(allComments);
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
 	}
 };
 
-const getComments = async (req, res) => {
+const deleteComment = async (req, res) => {
 	try {
-		const movies = await Movie.find({});
-		let allComments = [];
+		const { commentId } = req.body;
 
-		movies.forEach((movie) => {
-			if (movie.comments && movie.comments.length > 0) {
-				allComments = allComments.concat(movie.comments);
-			}
-		});
+		await Movie.updateOne(
+			{ 'comments._id': commentId },
+			{ $pull: { comments: { _id: commentId } } }
+		);
 
-		res.status(200).json(allComments);
+		res.status(200).json({ message: 'Komentarz został usunięty' });
 	} catch (error) {
 		console.log(error.message);
 		res.status(500).json({ error: 'Coś poszło nie tak' });
@@ -122,4 +163,5 @@ module.exports = {
 	updateMovie,
 	deleteMovie,
 	getComments,
+	deleteComment,
 };

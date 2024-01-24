@@ -9,6 +9,7 @@ const {
 	addMovie,
 	updateMovie,
 	deleteMovie,
+	deleteComment,
 } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -23,5 +24,6 @@ router.patch('/movies', requireToken, checkAdmin, updateMovie);
 router.delete('/movies/:id', requireToken, checkAdmin, deleteMovie);
 
 router.get('/comments', requireToken, checkAdmin, getComments);
+router.patch('/comments', requireToken, checkAdmin, deleteComment);
 
 module.exports = router;

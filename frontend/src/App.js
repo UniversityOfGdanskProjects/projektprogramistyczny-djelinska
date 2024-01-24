@@ -4,6 +4,7 @@ import {
 	BrowserRouter as Router,
 	Routes,
 } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 import AdminDashboard from './pages/AdminDashboard';
 import FavoriteMovies from './pages/FavoriteMovies';
@@ -22,6 +23,9 @@ import { useAuthContext } from './contexts/AuthProvider';
 
 function App() {
 	const { user } = useAuthContext();
+	const isAdmin = localStorage.getItem('user')
+		? !JSON.parse(localStorage.getItem('user')).is_user
+		: false;
 
 	return (
 		<Router>
@@ -31,15 +35,7 @@ function App() {
 					<Route path='/' element={<Home />} />
 					<Route
 						path='/panel'
-						element={
-							!user ? (
-								<Navigate tp='/' />
-							) : !user.is_user ? (
-								<AdminDashboard />
-							) : (
-								<Navigate to='/' />
-							)
-						}
+						element={isAdmin ? <AdminDashboard /> : <Navigate to='/' />}
 					/>
 					<Route
 						path='/rejestracja'
