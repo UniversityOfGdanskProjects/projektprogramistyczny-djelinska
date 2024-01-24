@@ -3,8 +3,15 @@ const Movie = require('../models/movieModel');
 const bcrypt = require('bcrypt');
 const { createToken } = require('../middlewares/authMiddleware');
 const { default: mongoose } = require('mongoose');
+const { validationResult } = require('express-validator');
 
 const registerUser = async (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ error: errors.array()[0].msg });
+	}
+
 	try {
 		const { username, email, password } = req.body;
 		const userExists = await User.findOne({ username });
@@ -31,6 +38,12 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ error: errors.array()[0].msg });
+	}
+
 	try {
 		const { username, password } = req.body;
 		const user = await User.findOne({ username });
@@ -70,6 +83,12 @@ const getUser = async (req, res) => {
 };
 
 const updateUserAccount = async (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ error: errors.array()[0].msg });
+	}
+
 	try {
 		const { currentPassword, newPassword } = req.body;
 		const user = await User.findById(req.user._id);

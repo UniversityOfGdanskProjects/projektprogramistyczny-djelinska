@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const Movie = require('../models/movieModel');
 const { default: mongoose } = require('mongoose');
+const { validationResult } = require('express-validator');
 
 const getUsers = async (req, res) => {
 	try {
@@ -48,6 +49,12 @@ const getMovies = async (req, res) => {
 };
 
 const addMovie = async (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ error: errors.array()[0].msg });
+	}
+
 	try {
 		const newMovie = req.body;
 
@@ -61,6 +68,12 @@ const addMovie = async (req, res) => {
 };
 
 const updateMovie = async (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ error: errors.array()[0].msg });
+	}
+
 	try {
 		const {
 			id,

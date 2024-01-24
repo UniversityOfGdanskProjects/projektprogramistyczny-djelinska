@@ -11,6 +11,8 @@ const {
 	deleteMovie,
 	deleteComment,
 } = require('../controllers/adminController');
+const addMovieValidationRules = require('../validations/addMovieValidation');
+const updateMovieValidationRules = require('../validations/updateMovieValidation');
 
 const router = express.Router();
 
@@ -19,8 +21,20 @@ router.get('/users', requireToken, checkAdmin, getUsers);
 router.delete('/users/:id', requireToken, checkAdmin, deleteUser);
 
 router.get('/movies', requireToken, checkAdmin, getMovies);
-router.post('/movies', requireToken, checkAdmin, addMovie);
-router.patch('/movies', requireToken, checkAdmin, updateMovie);
+router.post(
+	'/movies',
+	requireToken,
+	checkAdmin,
+	addMovieValidationRules,
+	addMovie
+);
+router.patch(
+	'/movies',
+	requireToken,
+	checkAdmin,
+	updateMovieValidationRules,
+	updateMovie
+);
 router.delete('/movies/:id', requireToken, checkAdmin, deleteMovie);
 
 router.get('/comments', requireToken, checkAdmin, getComments);

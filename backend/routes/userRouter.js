@@ -16,15 +16,23 @@ const {
 	deleteIgnoredMovie,
 } = require('../controllers/userController');
 const { requireToken, checkAdmin } = require('../middlewares/authMiddleware');
+const userRegisterValidationRules = require('../validations/userRegisterValidation');
+const userLoginValidationRules = require('../validations/userLoginValidation');
+const updateAccountValidationRules = require('../validations/updateAccountValidation');
 
 const router = express.Router();
 
 // /api/users
-router.post('/register', registerUser);
-router.post('/login', loginUser);
+router.post('/register', userRegisterValidationRules, registerUser);
+router.post('/login', userLoginValidationRules, loginUser);
 
 router.get('/account', requireToken, getUser);
-router.patch('/account/update', requireToken, updateUserAccount);
+router.patch(
+	'/account/update',
+	requireToken,
+	updateAccountValidationRules,
+	updateUserAccount
+);
 router.delete('/account/delete', requireToken, deleteUserAccount);
 
 router.get('/favorites', requireToken, getUserFavoriteMovies);
