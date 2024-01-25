@@ -434,6 +434,51 @@ const deleteIgnoredMovie = async (req, res) => {
 	}
 };
 
+const getTopUsers = async (req, res) => {
+	try {
+		const topUsers = await Movie.aggregate([
+			{
+				$project: {
+					combinedData: {
+						$concatArrays: ['$ratings', '$comments'],
+					},
+				},
+			},
+			{ $unwind: '$combinedData' },
+			{
+				$group: {
+					_id: '$combinedData.user_id',
+					totalInteractions: { $sum: 1 },
+				},
+			},
+			{ $sort: { totalInteractions: -1 } },
+			{ $limit: 5 },
+			{
+				$lookup: {
+					from: 'users',
+					localField: '_id',
+					foreignField: '_id',
+					as: 'userData',
+				},
+			},
+			{
+				$unwind: '$userData',
+			},
+			{
+				$project: {
+					username: '$userData.username',
+					totalInteractions: 1,
+				},
+			},
+		]);
+
+		res.status(200).json(topUsers);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
 module.exports = {
 	registerUser,
 	loginUser,
@@ -449,4 +494,5 @@ module.exports = {
 	getUserIgnoredMovies,
 	addIgnoredMovie,
 	deleteIgnoredMovie,
+	getTopUsers,
 };

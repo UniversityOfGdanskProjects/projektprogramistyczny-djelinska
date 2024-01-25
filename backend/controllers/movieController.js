@@ -219,6 +219,42 @@ const addMovieComment = async (req, res) => {
 	}
 };
 
+const getTopPopularMovies = async (req, res) => {
+	try {
+		const movies = await User.aggregate([
+			{ $unwind: '$favorite_movies' },
+			{ $group: { _id: '$favorite_movies', count: { $sum: 1 } } },
+			{ $sort: { count: -1, _id: 1 } },
+			{ $limit: 3 },
+		]);
+
+		const movieIds = movies.map((result) => result._id);
+		const topMovies = await Movie.find(
+			{ _id: { $in: movieIds } },
+			{ title: 1, poster_image: 1 }
+		);
+
+		res.status(200).json(topMovies);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
+const getTopRatedMovies = async (req, res) => {
+	try {
+		const topMovies = await Movie.find({ rate: { $gt: 0 } })
+			.sort({ rate: -1, _id: 1 })
+			.limit(5)
+			.select('title rate');
+
+		res.status(200).json(topMovies);
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: 'Coś poszło nie tak' });
+	}
+};
+
 module.exports = {
 	importMovies,
 	getMovies,
@@ -227,4 +263,6 @@ module.exports = {
 	getMoviesYears,
 	addMovieRating,
 	addMovieComment,
+	getTopPopularMovies,
+	getTopRatedMovies,
 };

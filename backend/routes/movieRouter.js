@@ -7,6 +7,8 @@ const {
 	getMoviesYears,
 	addMovieRating,
 	addMovieComment,
+	getTopPopularMovies,
+	getTopRatedMovies,
 } = require('../controllers/movieController');
 const {
 	checkAdmin,
@@ -25,5 +27,8 @@ router.get('/years', getMoviesYears);
 
 router.post('/rate/add', requireToken, addMovieRating);
 router.post('/comment/add', requireToken, addMovieComment);
+
+router.get('/top/popular', getTopPopularMovies);
+router.get('/top/rated', getTopRatedMovies);
 
 module.exports = router;

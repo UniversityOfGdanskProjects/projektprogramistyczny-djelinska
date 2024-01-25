@@ -109,7 +109,7 @@ button:disabled {
 }
 
 th {
-	@apply text-base font-semibold text-nowrap whitespace-nowrap;
+	@apply text-left text-base font-semibold text-nowrap whitespace-nowrap;
 }
 
 th,
