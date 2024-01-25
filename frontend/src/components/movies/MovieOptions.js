@@ -43,7 +43,7 @@ const MovieOptions = ({ movieId, type, handleChange }) => {
 
 	return (
 		<div>
-			<div className='flex items-center gap-4 mt-6'>
+			<div className='flex flex-wrap items-center gap-4 mt-6'>
 				{type === 'list' && (
 					<>
 						<button

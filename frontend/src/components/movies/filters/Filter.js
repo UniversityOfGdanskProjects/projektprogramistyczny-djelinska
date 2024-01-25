@@ -30,7 +30,7 @@ const Filter = () => {
 	return (
 		<div className='flex flex-col gap-2 mb-4'>
 			<span className='text-sm'>Filtrowanie:</span>
-			<div className='flex gap-6'>
+			<div className='flex flex-wrap gap-4'>
 				<FilterSelect
 					type='genre'
 					label='Wybierz gatunek'
@@ -47,18 +47,20 @@ const Filter = () => {
 					value={rate}
 					handleSelect={(e) => setRate(e.target.value)}
 				/>
-				<button
-					onClick={handleFilter}
-					className='default-button border-gray-light bg-black-dark'
-				>
-					Wyszukaj
-				</button>
-				<button
-					onClick={handleReset}
-					className='default-button border-gray-dark bg-black-dark'
-				>
-					Wyczyść
-				</button>
+				<div className='flex gap-4'>
+					<button
+						onClick={handleFilter}
+						className='default-button border-gray-light bg-black-dark'
+					>
+						Wyszukaj
+					</button>
+					<button
+						onClick={handleReset}
+						className='default-button border-gray-dark bg-black-dark'
+					>
+						Wyczyść
+					</button>
+				</div>
 			</div>
 		</div>
 	);

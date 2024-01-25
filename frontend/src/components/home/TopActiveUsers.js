@@ -37,24 +37,27 @@ const TopActiveUsers = () => {
 			)}
 			{error && <InlineError error={error} />}
 			{topUsers && (
-				<table className='w-full'>
-					<thead>
-						<tr>
-							<th>Pozycja</th>
-							<th>Nazwa użytkownika</th>
-							<th>Liczba interakcji</th>
-						</tr>
-					</thead>
-					<tbody>
-						{topUsers.map((user, index) => (
-							<tr key={user._id}>
-								<td>{index + 1}</td>
-								<td>{user.username}</td>
-								<td>{user.totalInteractions}</td>
+				<div className='overflow-x-scroll'>
+					<table className='w-full'>
+						<thead>
+							<tr>
+								<th>Pozycja</th>
+								<th>Nazwa użytkownika</th>
+								<th>Liczba interakcji</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{topUsers.map((user, index) => (
+								<tr key={user._id}>
+									<td>{index + 1}</td>
+									<td>{user.username}</td>
+									<td>{user.totalInteractions}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+					tab
+				</div>
 			)}
 		</div>
 	);

@@ -33,8 +33,8 @@ const LoginForm = () => {
 			},
 		});
 	return (
-		<div className='image-background w-full h-screen flex flex-col gap-6 items-center justify-center'>
-			<div className=' bg-black-light text-white p-6 rounded-xl w-96 shadow-2xl'>
+		<div className='image-background py-navbar px-6 min-h-screen w-full flex flex-col gap-6 items-center justify-center'>
+			<div className=' bg-black-light text-white p-6 rounded-xl w-full max-w-96 shadow-2xl'>
 				<h2 className='mb-6'>Zaloguj się</h2>
 				<form
 					method='post'
@@ -76,7 +76,7 @@ const LoginForm = () => {
 					<button
 						type='submit'
 						disabled={!(isValid && dirty)}
-						className='default-button bg-red-dark border-red-dark text-white font-medium'
+						className='default-button sm:w-full bg-red-dark border-red-dark text-white font-medium'
 					>
 						Zaloguj
 					</button>

@@ -33,10 +33,10 @@ const MovieDetails = () => {
 		<div>
 			{error && <NotFound />}
 			{movie && (
-				<div className='w-full pt-navbar bg-black-dark'>
-					<div className='flex flex-col gap-6 p-6 mx-auto w-full max-w-screen-lg'>
-						<div className='flex gap-6'>
-							<div className='w-80 h-96 rounded-md overflow-hidden bg-black-light'>
+				<div className='main-container bg-black-dark'>
+					<div className='flex flex-col gap-6 pb-6'>
+						<div className='flex flex-col sm:flex-row gap-6'>
+							<div className='w-full h-96 rounded-md overflow-hidden bg-black-light'>
 								<img
 									src={movie.poster_image}
 									alt={movie.title}
@@ -85,7 +85,7 @@ const MovieDetails = () => {
 						)}
 						<div>
 							<h3 className='mb-4'>Główni aktorzy</h3>
-							<div className='grid grid-cols-4 gap-6'>
+							<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
 								{movie.actors.map((actor) => (
 									<ActorCard key={actor._id} actor={actor} />
 								))}

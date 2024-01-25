@@ -4,7 +4,7 @@ import TopRatedMovies from '../components/home/TopRatedMovies';
 
 const Home = () => {
 	return (
-		<div className='w-full pt-navbar my-6 max-w-screen-lg'>
+		<div className='main-container'>
 			<MostPopularMovies />
 			<TopRatedMovies />
 			<TopActiveUsers />

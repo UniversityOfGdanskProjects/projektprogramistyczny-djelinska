@@ -58,7 +58,6 @@ const MoviesProvider = ({ children }) => {
 	}
 
 	useEffect(() => {
-		console.log(state);
 		getMovies();
 	}, [state]);
 

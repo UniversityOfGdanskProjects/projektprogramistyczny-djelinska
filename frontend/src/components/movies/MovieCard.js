@@ -13,7 +13,7 @@ const MovieCard = ({ movie, simple, type, handleChange }) => {
 		<div className='movie-card-container'>
 			<Link
 				to={`/filmy/${movie._id}`}
-				className='bg-black-dark w-40 h-64 rounded-l-md overflow-hidden'
+				className='bg-black-dark w-full sm:w-48 h-64 rounded-l-md overflow-hidden'
 			>
 				<img
 					src={movie.poster_image}

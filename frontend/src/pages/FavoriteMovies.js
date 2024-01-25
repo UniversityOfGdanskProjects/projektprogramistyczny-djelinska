@@ -19,12 +19,12 @@ const FavoriteMovies = () => {
 	}, []);
 
 	return (
-		<div className='w-full pt-navbar mt-6 max-w-screen-lg'>
+		<div className='main-container'>
 			<h2 className='mb-4'>Lista ulubionych filmów</h2>
 			{isLoading && <LoadingMessage message='Ładowanie filmów...' />}
 			{error && <InlineError error={error} />}
 			{favorites.length > 0 ? (
-				<div className='grid grid-cols-2 gap-6 mt-4'>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-4'>
 					{favorites.map((movie) => (
 						<MovieCard
 							key={movie._id}

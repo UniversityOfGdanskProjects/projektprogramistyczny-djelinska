@@ -33,26 +33,28 @@ const TopRatedMovies = () => {
 			{isLoading && <LoadingMessage message='Ładowanie listy filmów...' />}
 			{error && <InlineError error={error} />}
 			{topMovies && (
-				<table className='w-full'>
-					<thead>
-						<tr>
-							<th>Pozycja</th>
-							<th>Tytuł filmu</th>
-							<th>Ocena</th>
-						</tr>
-					</thead>
-					<tbody>
-						{topMovies.map((movie, index) => (
-							<tr key={movie._id}>
-								<td>{index + 1}</td>
-								<td>
-									<Link to={`/filmy/${movie._id}`}>{movie.title}</Link>
-								</td>
-								<td>{movie.rate.toFixed(1)}</td>
+				<div className='overflow-x-scroll'>
+					<table className='w-full'>
+						<thead>
+							<tr>
+								<th>Pozycja</th>
+								<th>Tytuł filmu</th>
+								<th>Ocena</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{topMovies.map((movie, index) => (
+								<tr key={movie._id}>
+									<td>{index + 1}</td>
+									<td>
+										<Link to={`/filmy/${movie._id}`}>{movie.title}</Link>
+									</td>
+									<td>{movie.rate.toFixed(1)}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			)}
 		</div>
 	);

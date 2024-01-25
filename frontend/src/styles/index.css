@@ -9,6 +9,18 @@
 	}
 }
 
+::-webkit-scrollbar {
+	@apply w-3;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-black-light rounded-sm;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply bg-black-dark rounded-sm;
+}
+
 body {
 	@apply bg-black-light text-white;
 }
@@ -49,7 +61,7 @@ button:disabled {
 }
 
 .default-button {
-	@apply px-6 py-3 text-sm border-2 flex gap-2 items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+	@apply w-full sm:w-fit px-6 py-3 text-sm border-2 flex gap-2 items-center justify-center rounded-full text-nowrap whitespace-nowrap;
 }
 
 .icon-button {
@@ -73,7 +85,7 @@ button:disabled {
 }
 
 .movie-card-container {
-	@apply flex bg-black-dark rounded-md;
+	@apply flex flex-col sm:flex-row bg-black-dark rounded-md;
 }
 
 .movie-card-container span {
@@ -127,4 +139,8 @@ tr:nth-child(even) {
 
 .table-button {
 	@apply border-2 border-gray-dark rounded-full p-2 flex items-center gap-2 text-sm font-medium;
+}
+
+.main-container {
+	@apply w-full pt-navbar px-6 my-6 max-w-screen-lg;
 }

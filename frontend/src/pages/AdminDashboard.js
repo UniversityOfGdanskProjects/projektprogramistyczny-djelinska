@@ -8,9 +8,9 @@ const AdminDashboard = () => {
 	const [dataType, setDataType] = useState('');
 
 	return (
-		<div className='pt-navbar my-6 w-full max-w-screen-lg'>
+		<div className='main-container'>
 			<h2 className='mb-4'>Panel zarządzania</h2>
-			<div className='flex gap-6 mb-4'>
+			<div className='flex flex-wrap gap-6 mb-4'>
 				<button
 					onClick={() => setDataType('addMovie')}
 					className='default-button'

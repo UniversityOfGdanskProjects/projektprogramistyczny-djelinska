@@ -47,33 +47,35 @@ const AdminCommentsList = () => {
 			{updateError && <InlineError error={updateError} />}
 			{message && <InlineMessage message={message} />}
 			{comments && (
-				<table className=''>
-					<thead>
-						<tr>
-							<th>Nazwa użytkownika</th>
-							<th>Tytuł filmu</th>
-							<th>Komentarz</th>
-						</tr>
-					</thead>
-					<tbody>
-						{comments.map((comment) => (
-							<tr key={comment._id}>
-								<td>{comment.username}</td>
-								<td>{comment.movieTitle}</td>
-								<td>{comment.comment}</td>
-								<td>
-									<button
-										onClick={() => handleDelete(comment.id)}
-										className='table-button'
-									>
-										<PiTrashSimpleBold />
-										<span>Usuń</span>
-									</button>
-								</td>
+				<div className='overflow-x-scroll'>
+					<table className='w-full'>
+						<thead>
+							<tr>
+								<th>Nazwa użytkownika</th>
+								<th>Tytuł filmu</th>
+								<th>Komentarz</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{comments.map((comment, index) => (
+								<tr key={index}>
+									<td>{comment.username}</td>
+									<td>{comment.movieTitle}</td>
+									<td>{comment.comment}</td>
+									<td>
+										<button
+											onClick={() => handleDelete(comment.id)}
+											className='table-button'
+										>
+											<PiTrashSimpleBold />
+											<span>Usuń</span>
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			)}
 		</div>
 	);

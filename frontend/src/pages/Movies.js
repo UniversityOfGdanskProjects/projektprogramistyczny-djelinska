@@ -26,10 +26,7 @@ const Movies = () => {
 	}, []);
 
 	return (
-		<div
-			ref={moviesListRef}
-			className='px-6 pt-navbar mt-6 pb-6 w-full max-w-screen-lg'
-		>
+		<div ref={moviesListRef} className='main-container'>
 			<SearchBar />
 			<h2 className='mt-6 mb-4'>Lista filmów</h2>
 			<div className='flex flex-col gap-2'>

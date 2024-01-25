@@ -47,31 +47,33 @@ const AdminUsersList = () => {
 			{deleteError && <InlineError error={deleteError} />}
 			{message && <InlineMessage message={message} />}
 			{users && (
-				<table>
-					<thead>
-						<tr>
-							<th>Nazwa użytkownika</th>
-							<th>Adres e-mail</th>
-						</tr>
-					</thead>
-					<tbody>
-						{users.map((user) => (
-							<tr key={user._id}>
-								<td>{user.username}</td>
-								<td>{user.email}</td>
-								<td>
-									<button
-										onClick={() => handleDelete(user._id)}
-										className='table-button'
-									>
-										<PiTrashSimpleBold />
-										<span>Usuń</span>
-									</button>
-								</td>
+				<div className='overflow-x-scroll'>
+					<table className='w-full'>
+						<thead>
+							<tr>
+								<th>Nazwa użytkownika</th>
+								<th>Adres e-mail</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{users.map((user) => (
+								<tr key={user._id}>
+									<td>{user.username}</td>
+									<td>{user.email}</td>
+									<td>
+										<button
+											onClick={() => handleDelete(user._id)}
+											className='table-button'
+										>
+											<PiTrashSimpleBold />
+											<span>Usuń</span>
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			)}
 		</div>
 	);

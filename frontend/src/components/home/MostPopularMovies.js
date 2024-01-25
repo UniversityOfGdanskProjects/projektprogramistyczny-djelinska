@@ -33,9 +33,9 @@ const MostPopularMovies = () => {
 			{isLoading && <LoadingMessage message='Ładowanie filmów...' />}
 			{error && <InlineError error={error} />}
 			{topMovies && (
-				<div className='grid grid-cols-3 gap-6'>
+				<div className='grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3'>
 					{topMovies.map((movie) => (
-						<div className='bg-black-dark p-4 rounded-md'>
+						<div key={movie._id} className='bg-black-dark p-4 rounded-md'>
 							<Link to={`/filmy/${movie._id}`}>
 								<div className='h-80 overflow-hidden'>
 									<img
@@ -45,7 +45,9 @@ const MostPopularMovies = () => {
 									/>
 								</div>
 							</Link>
-							<h3 className='mt-4'>{movie.title}</h3>
+							<Link to={`/filmy/${movie._id}`}>
+								<h3 className='mt-4'>{movie.title}</h3>
+							</Link>
 						</div>
 					))}
 				</div>
