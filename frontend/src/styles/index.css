@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	html {
+		font-family: 'Poppins', system-ui, sans-serif;
+	}
+}
+
+::-webkit-scrollbar {
+	@apply w-3;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-black-light rounded-sm;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply bg-black-dark rounded-sm;
+}
+
+body {
+	@apply bg-black-light text-white;
+}
+
+svg {
+	@apply text-base;
+}
+
+.image-background {
+	background-position: top;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: url('https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+
+h2 {
+	@apply text-2xl font-semibold;
+}
+
+h3 {
+	@apply text-lg font-medium;
+}
+
+h4 {
+	@apply text-base font-semibold;
+}
+
+a {
+	@apply text-nowrap whitespace-nowrap;
+}
+
+label {
+	@apply w-fit;
+}
+
+button:disabled {
+	@apply opacity-75;
+}
+
+.default-button {
+	@apply w-full sm:w-fit px-6 py-3 text-sm border-2 flex gap-2 items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+}
+
+.icon-button {
+	@apply w-fit h-fit p-3 text-base border-2 flex items-center justify-center rounded-full text-nowrap whitespace-nowrap;
+}
+
+.form-field-wrapper {
+	@apply flex flex-col gap-3;
+}
+
+.form-input {
+	@apply max-w-96 px-4 py-2 bg-transparent text-white rounded-full border-2 border-gray-light placeholder:text-gray-light focus:ring-0 focus:border-white;
+}
+
+.form-textarea {
+	@apply resize-none px-4 py-2 bg-black-light text-white rounded-md border-none placeholder:text-gray-light focus:ring-0;
+}
+
+.form-error {
+	@apply px-2 text-sm;
+}
+
+.movie-card-container {
+	@apply flex flex-col sm:flex-row bg-black-dark rounded-md;
+}
+
+.movie-card-container span {
+	@apply text-nowrap whitespace-nowrap;
+}
+
+.movie-card-rating {
+	@apply flex items-center gap-2;
+}
+
+.movie-card-rating svg {
+	@apply text-red-dark;
+}
+
+.movie-card-button {
+	@apply w-fit px-4 py-2 font-medium bg-gray-dark flex items-center gap-2 rounded-full;
+}
+
+.pagination-button {
+	@apply w-fit px-4 bg-gray-light;
+}
+
+.movies-select {
+	@apply bg-black-dark border-none w-fit pr-10 focus:ring-2 focus:ring-red-dark;
+}
+
+.rating-star-checked svg {
+	@apply text-2xl text-red-dark;
+}
+
+.rating-star-not-checked svg {
+	@apply text-2xl text-gray-light;
+}
+
+th {
+	@apply text-left text-base font-semibold text-nowrap whitespace-nowrap;
+}
+
+th,
+td {
+	@apply p-2;
+}
+
+tr:nth-child(even) {
+	@apply bg-black-dark;
+}
+
+.edit-input {
+	@apply p-1 m-1 w-full border-2 border-gray-dark bg-transparent text-white rounded-md focus:ring-0;
+}
+
+.table-button {
+	@apply border-2 border-gray-dark rounded-full p-2 flex items-center gap-2 text-sm font-medium;
+}
+
+.main-container {
+	@apply w-full pt-navbar px-6 my-6 max-w-screen-lg;
+}
